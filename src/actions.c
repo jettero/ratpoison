@@ -2668,19 +2668,26 @@ cmd_quit(int interactive UNUSED, struct cmdarg **args UNUSED)
 
 /* Show the current time on the bar. Thanks to Martin Samuelsson
    <cosis@lysator.liu.se> for the patch. Thanks to Jonathan Walther
-   <krooger@debian.org> for making it pretty. */
+   <krooger@debian.org> for making it pretty. 
+   
+   Christian Koch <cfkoch@sdf.lonestar.org> changed the implementation from
+   ctime() to strftime(). */
 cmdret *
 cmd_time (int interactive UNUSED, struct cmdarg **args UNUSED)
 {
-  char *msg, *tmp;
-  time_t timep;
+  time_t lt;
+  struct tm *ptr;
+  char timestr[80];
+
+  char *msg;
   cmdret *ret;
 
-  timep = time(NULL);
-  tmp = ctime(&timep);
-  msg = xmalloc (strlen (tmp));
-  strncpy(msg, tmp, strlen (tmp) - 1);  /* Remove the newline */
-  msg[strlen(tmp) - 1] = 0;
+  lt = time(NULL);
+  ptr = localtime(&lt);
+
+  strftime(timestr, 100, "%a %B %d, %Y %l:%M:%S %p", ptr);
+  msg = xmalloc(strlen(timestr));
+  strncpy(msg, timestr, strlen(timestr) + 1);
 
   ret = cmdret_new (RET_SUCCESS, "%s", msg);
   free (msg);
