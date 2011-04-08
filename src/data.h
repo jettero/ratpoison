@@ -236,6 +236,8 @@ struct rp_defaults
   XFontSet font;
   char *font_string;
 
+  char *timefmt_string;
+
   char *fgcolor_string;
   char *bgcolor_string;
   char *fwcolor_string;

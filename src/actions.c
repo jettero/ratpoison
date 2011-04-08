@@ -53,6 +53,7 @@ static cmdret * set_transgravity      (struct cmdarg **args);
 static cmdret * set_maxsizegravity    (struct cmdarg **args);
 static cmdret * set_bargravity        (struct cmdarg **args);
 static cmdret * set_font              (struct cmdarg **args);
+static cmdret * set_timefmt           (struct cmdarg **args);
 static cmdret * set_padding           (struct cmdarg **args);
 static cmdret * set_border            (struct cmdarg **args);
 static cmdret * set_barborder         (struct cmdarg **args);
@@ -122,6 +123,7 @@ init_set_vars(void)
   add_set_var("maxsizegravity", set_maxsizegravity, 1, "", arg_GRAVITY);
   add_set_var("bargravity",     set_bargravity,     1, "", arg_GRAVITY);
   add_set_var("font",           set_font,           1, "", arg_STRING);
+  add_set_var("timefmt",        set_timefmt,        1, "", arg_STRING);
   add_set_var("padding", set_padding, 4,
               "", arg_NUMBER, "", arg_NUMBER, "", arg_NUMBER, "", arg_NUMBER);
   add_set_var("border",       set_border,       1, "", arg_NUMBER);
@@ -2684,7 +2686,7 @@ cmd_time (int interactive UNUSED, struct cmdarg **args UNUSED)
   lt = time(NULL);
   ptr = localtime(&lt);
 
-  strftime(timestr, 100, "%a %B %d, %Y %l:%M:%S %p", ptr);
+  strftime(timestr, 100, defaults.timefmt_string, ptr);
   msg = xmalloc(strlen(timestr));
   strncpy(msg, timestr, strlen(timestr) + 1);
 
@@ -3771,6 +3773,17 @@ set_font (struct cmdarg **args)
   defaults.font_string = xstrdup (ARG_STRING(0));
 
   return cmdret_new (RET_SUCCESS, NULL);
+}
+
+static cmdret *
+set_timefmt (struct cmdarg **args)
+{
+  if (args[0] == NULL) {
+    return cmdret_new(RET_SUCCESS, "%s", defaults.timefmt_string);
+  }
+
+  defaults.timefmt_string = xstrdup(ARG_STRING(0));
+  return cmdret_new(RET_SUCCESS, NULL);
 }
 
 static cmdret *
