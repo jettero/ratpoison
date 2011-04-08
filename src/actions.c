@@ -115,35 +115,35 @@ set_var_free (struct set_var *var)
 static void
 init_set_vars(void)
 {
-  add_set_var ("resizeunit", set_resizeunit, 1, "", arg_NUMBER);
-  add_set_var ("maxundos", set_maxundos, 1, "", arg_NUMBER);
-  add_set_var ("wingravity", set_wingravity, 1, "", arg_GRAVITY);
-  add_set_var ("transgravity", set_transgravity, 1, "", arg_GRAVITY);
-  add_set_var ("maxsizegravity", set_maxsizegravity, 1, "", arg_GRAVITY);
-  add_set_var ("bargravity", set_bargravity, 1, "", arg_GRAVITY);
-  add_set_var ("font", set_font, 1, "", arg_STRING);
-  add_set_var ("padding", set_padding, 4,
-               "", arg_NUMBER, "", arg_NUMBER, "", arg_NUMBER, "", arg_NUMBER);
-  add_set_var ("border", set_border, 1, "", arg_NUMBER);
-  add_set_var ("barborder", set_barborder, 1, "", arg_NUMBER);
-  add_set_var ("barinpadding", set_barinpadding, 1, "", arg_NUMBER);
-  add_set_var ("inputwidth", set_inputwidth, 1, "", arg_NUMBER);
-  add_set_var ("waitcursor", set_waitcursor, 1, "", arg_NUMBER);
-  add_set_var ("winfmt", set_winfmt, 1, "", arg_REST);
-  add_set_var ("winname", set_winname, 1, "", arg_STRING);
-  add_set_var ("framefmt", set_framefmt, 1, "", arg_REST);
-  add_set_var ("fgcolor", set_fgcolor, 1, "", arg_STRING);
-  add_set_var ("bgcolor", set_bgcolor, 1, "", arg_STRING);
-  add_set_var ("fwcolor", set_fwcolor, 1, "", arg_STRING);
-  add_set_var ("bwcolor", set_bwcolor, 1, "", arg_STRING);
-  add_set_var ("barpadding", set_barpadding, 2, "", arg_NUMBER, "", arg_NUMBER);
-  add_set_var ("winliststyle", set_winliststyle, 1, "", arg_STRING);
-  add_set_var ("framesels", set_framesels, 1, "", arg_STRING);
-  add_set_var ("infofmt", set_infofmt, 1, "", arg_REST);
-  add_set_var ("topkmap", set_topkmap, 1, "", arg_STRING);
-  add_set_var ("historysize", set_historysize, 1, "", arg_NUMBER);
-  add_set_var ("historycompaction", set_historycompaction, 1, "", arg_NUMBER);
-  add_set_var ("historyexpansion", set_historyexpansion, 1, "", arg_NUMBER);
+  add_set_var("resizeunit",     set_resizeunit, 1, "", arg_NUMBER);
+  add_set_var("maxundos",       set_maxundos, 1, "", arg_NUMBER);
+  add_set_var("wingravity",     set_wingravity, 1, "", arg_GRAVITY);
+  add_set_var("transgravity",   set_transgravity, 1, "", arg_GRAVITY);
+  add_set_var("maxsizegravity", set_maxsizegravity, 1, "", arg_GRAVITY);
+  add_set_var("bargravity",     set_bargravity, 1, "", arg_GRAVITY);
+  add_set_var("font",           set_font, 1, "", arg_STRING);
+  add_set_var("padding", set_padding, 4,
+              "", arg_NUMBER, "", arg_NUMBER, "", arg_NUMBER, "", arg_NUMBER);
+  add_set_var("border",       set_border, 1, "", arg_NUMBER);
+  add_set_var("barborder",    set_barborder, 1, "", arg_NUMBER);
+  add_set_var("barinpadding", set_barinpadding, 1, "", arg_NUMBER);
+  add_set_var("inputwidth",   set_inputwidth, 1, "", arg_NUMBER);
+  add_set_var("waitcursor",   set_waitcursor, 1, "", arg_NUMBER);
+  add_set_var("winfmt",       set_winfmt, 1, "", arg_REST);
+  add_set_var("winname",      set_winname, 1, "", arg_STRING);
+  add_set_var("framefmt",     set_framefmt, 1, "", arg_REST);
+  add_set_var("fgcolor",      set_fgcolor, 1, "", arg_STRING);
+  add_set_var("bgcolor",      set_bgcolor, 1, "", arg_STRING);
+  add_set_var("fwcolor",      set_fwcolor, 1, "", arg_STRING);
+  add_set_var("bwcolor",      set_bwcolor, 1, "", arg_STRING);
+  add_set_var("barpadding",   set_barpadding, 2, "", arg_NUMBER, "", arg_NUMBER);
+  add_set_var("winliststyle", set_winliststyle, 1, "", arg_STRING);
+  add_set_var("framesels",    set_framesels, 1, "", arg_STRING);
+  add_set_var("infofmt",      set_infofmt, 1, "", arg_REST);
+  add_set_var("topkmap",      set_topkmap, 1, "", arg_STRING);
+  add_set_var("historysize",  set_historysize, 1, "", arg_NUMBER);
+  add_set_var("historycompaction", set_historycompaction, 1, "", arg_NUMBER);
+  add_set_var("historyexpansion",  set_historyexpansion, 1, "", arg_NUMBER);
 }
 
 /* rp_keymaps is ratpoison's list of keymaps. */
@@ -226,20 +226,20 @@ init_user_commands(void)
   add_command ("execa",		cmd_execa,	1, 1, 1, 
 	       "/bin/sh -c ", arg_SHELLCMD);
   add_command ("execf",		cmd_execf,	2, 2, 2, 
-	       "frame to execute in:", arg_FRAME,
-	       "/bin/sh -c ", arg_SHELLCMD);
+               "frame to execute in:", arg_FRAME,
+               "/bin/sh -c ", arg_SHELLCMD);
   add_command ("fdump",         cmd_fdump,      1, 0, 0,
                "", arg_NUMBER);
   add_command ("focus",         cmd_next_frame, 0, 0, 0);
   add_command ("focusprev",     cmd_prev_frame, 0, 0, 0);
   add_command ("focusdown",     cmd_focusdown,  0, 0, 0);
-  add_command ("exchangeup",	cmd_exchangeup, 0, 0, 0);	
+  add_command ("exchangeup",	  cmd_exchangeup, 0, 0, 0);	
   add_command ("exchangedown",	cmd_exchangedown, 0, 0, 0);
   add_command ("exchangeleft",	cmd_exchangeleft, 0, 0, 0);
   add_command ("exchangeright",	cmd_exchangeright, 0, 0, 0);
   add_command ("swap",	cmd_swap, 2, 1, 1,
-	       "destination frame: ", arg_FRAME,
-	       "source frame: ", arg_FRAME);
+               "destination frame: ", arg_FRAME,
+               "source frame: ", arg_FRAME);
   add_command ("focuslast",     cmd_focuslast,  0, 0, 0);
   add_command ("focusleft",     cmd_focusleft,  0, 0, 0);
   add_command ("focusright",    cmd_focusright, 0, 0, 0);
@@ -339,7 +339,7 @@ init_user_commands(void)
                "Value: ", arg_REST);
   add_command ("shrink",        cmd_shrink,     0, 0, 0);
   add_command ("sfrestore",	cmd_sfrestore,	1, 1, 1,
-	       "Frames: ", arg_REST);
+               "Frames: ", arg_REST);
   add_command ("source",        cmd_source,     1, 1, 1,
                "File: ", arg_REST);
   add_command ("sselect",       cmd_sselect,    1, 1, 1,
