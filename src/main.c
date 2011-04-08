@@ -546,7 +546,7 @@ init_defaults (void)
   set_extents_of_fontset (defaults.font);
 #endif
 
-  defaults.timefmt_string = xstrdup ("TEST TIMEFMT: %m/%d/%y");
+  defaults.timefmt_string = xstrdup ("%a %b %d %k:%M:%S %Y");
 
   defaults.fgcolor_string = xstrdup ("black");
   defaults.bgcolor_string = xstrdup ("white");
