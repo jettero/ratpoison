@@ -46,14 +46,14 @@
 
 /* Command line options */
 static struct option ratpoison_longopts[] =
-  { {"help",            no_argument,            0,      'h'},
-    {"interactive",     no_argument,            0,      'i'},
-    {"version", no_argument,            0,      'v'},
-    {"command", required_argument,      0,      'c'},
-    {"display", required_argument,      0,      'd'},
-    {"screen",  required_argument,      0,      's'},
-    {"file",            required_argument,      0,      'f'},
-    {0,         0,                      0,      0} };
+  { {"help",        no_argument,       0, 'h'},
+    {"interactive", no_argument,       0, 'i'},
+    {"version",     no_argument,       0, 'v'},
+    {"command",     required_argument, 0, 'c'},
+    {"display",     required_argument, 0, 'd'},
+    {"screen",      required_argument, 0, 's'},
+    {"file",        required_argument, 0, 'f'},
+    {0,             0,                 0, 0  } };
 
 static char ratpoison_opts[] = "hvic:d:s:f:";
 
