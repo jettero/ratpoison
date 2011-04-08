@@ -47,34 +47,34 @@ struct set_var
   struct list_head node;
 };
 
-static cmdret * set_resizeunit (struct cmdarg **args);
-static cmdret * set_wingravity (struct cmdarg **args);
-static cmdret * set_transgravity (struct cmdarg **args);
-static cmdret * set_maxsizegravity (struct cmdarg **args);
-static cmdret * set_bargravity (struct cmdarg **args);
-static cmdret * set_font (struct cmdarg **args);
-static cmdret * set_padding (struct cmdarg **args);
-static cmdret * set_border (struct cmdarg **args);
-static cmdret * set_barborder (struct cmdarg **args);
-static cmdret * set_barinpadding (struct cmdarg **args);
-static cmdret * set_inputwidth (struct cmdarg **args);
-static cmdret * set_waitcursor (struct cmdarg **args);
-static cmdret * set_winfmt (struct cmdarg **args);
-static cmdret * set_winname (struct cmdarg **args);
-static cmdret * set_framefmt (struct cmdarg **args);
-static cmdret * set_fgcolor (struct cmdarg **args);
-static cmdret * set_bgcolor (struct cmdarg **args);
-static cmdret * set_fwcolor (struct cmdarg **args);
-static cmdret * set_bwcolor (struct cmdarg **args);
-static cmdret * set_barpadding (struct cmdarg **args);
-static cmdret * set_winliststyle (struct cmdarg **args);
-static cmdret * set_framesels (struct cmdarg **args);
-static cmdret * set_maxundos (struct cmdarg **args);
-static cmdret * set_infofmt (struct cmdarg **args);
-static cmdret * set_topkmap (struct cmdarg **args);
-static cmdret * set_historysize (struct cmdarg **args);
+static cmdret * set_resizeunit        (struct cmdarg **args);
+static cmdret * set_wingravity        (struct cmdarg **args);
+static cmdret * set_transgravity      (struct cmdarg **args);
+static cmdret * set_maxsizegravity    (struct cmdarg **args);
+static cmdret * set_bargravity        (struct cmdarg **args);
+static cmdret * set_font              (struct cmdarg **args);
+static cmdret * set_padding           (struct cmdarg **args);
+static cmdret * set_border            (struct cmdarg **args);
+static cmdret * set_barborder         (struct cmdarg **args);
+static cmdret * set_barinpadding      (struct cmdarg **args);
+static cmdret * set_inputwidth        (struct cmdarg **args);
+static cmdret * set_waitcursor        (struct cmdarg **args);
+static cmdret * set_winfmt            (struct cmdarg **args);
+static cmdret * set_winname           (struct cmdarg **args);
+static cmdret * set_framefmt          (struct cmdarg **args);
+static cmdret * set_fgcolor           (struct cmdarg **args);
+static cmdret * set_bgcolor           (struct cmdarg **args);
+static cmdret * set_fwcolor           (struct cmdarg **args);
+static cmdret * set_bwcolor           (struct cmdarg **args);
+static cmdret * set_barpadding        (struct cmdarg **args);
+static cmdret * set_winliststyle      (struct cmdarg **args);
+static cmdret * set_framesels         (struct cmdarg **args);
+static cmdret * set_maxundos          (struct cmdarg **args);
+static cmdret * set_infofmt           (struct cmdarg **args);
+static cmdret * set_topkmap           (struct cmdarg **args);
+static cmdret * set_historysize       (struct cmdarg **args);
 static cmdret * set_historycompaction (struct cmdarg **args);
-static cmdret * set_historyexpansion (struct cmdarg **args);
+static cmdret * set_historyexpansion  (struct cmdarg **args);
 
 LIST_HEAD(set_vars);
 
@@ -2987,9 +2987,10 @@ typedef struct resize_binding resize_binding;
 struct resize_binding
 {
   struct rp_key key;
-  enum resize_action {RESIZE_UNKNOWN=0, RESIZE_VGROW, RESIZE_VSHRINK,
-      RESIZE_HGROW, RESIZE_HSHRINK, RESIZE_TO_WINDOW,
-      RESIZE_ABORT, RESIZE_END } action;
+  enum resize_action {
+    RESIZE_UNKNOWN=0, RESIZE_VGROW, RESIZE_VSHRINK,
+    RESIZE_HGROW, RESIZE_HSHRINK, RESIZE_TO_WINDOW,
+    RESIZE_ABORT, RESIZE_END } action;
 };
 
 static resize_binding resize_bindings[] =
@@ -3004,7 +3005,7 @@ static resize_binding resize_bindings[] =
  * (after the values from conf.h, so that they have lower priority):
  * first the arrow keys: */
      {{XK_Escape,               0},                     RESIZE_ABORT},
-     {{XK_Down,         0},                     RESIZE_VGROW},
+     {{XK_Down,                 0},                     RESIZE_VGROW},
      {{XK_Up,                   0},                     RESIZE_VSHRINK},
      {{XK_Right,                0},                     RESIZE_HGROW},
      {{XK_Left,                 0},                     RESIZE_HSHRINK},
@@ -3278,31 +3279,33 @@ cmd_license (int interactive UNUSED, struct cmdarg **args UNUSED)
   int y = 10;
   int i;
   int max_width = 0;
-  char *license_text[] = { PACKAGE " " VERSION, "(built " __DATE__ " " __TIME__ ")",
-                           "",
-                           "Copyright (C) 2000, 2001, 2002, 2003, 2004 Shawn Betts",
-                           "",
-                           "ratpoison is free software; you can redistribute it and/or modify ",
-                           "it under the terms of the GNU General Public License as published by ",
-                           "the Free Software Foundation; either version 2, or (at your option) ",
-                           "any later version.",
-                           "",
-                           "ratpoison is distributed in the hope that it will be useful, ",
-                           "but WITHOUT ANY WARRANTY; without even the implied warranty of ",
-                           "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the ",
-                           "GNU General Public License for more details.",
-                           "",
-                           "You should have received a copy of the GNU General Public License ",
-                           "along with this software; see the file COPYING.  If not, write to ",
-                           "the Free Software Foundation, Inc., 59 Temple Place, Suite 330, ",
-                           "Boston, MA 02111-1307 USA",
-                           "",
-                           "Send bugreports, fixes, enhancements, t-shirts, money, beer & pizza ",
-                           "to ratpoison-devel@nongnu.org or visit ",
-                           "http://www.nongnu.org/ratpoison/",
-                           "",
-                           "[Press any key to end.] ",
-                           NULL};
+  char *license_text[] = {
+    PACKAGE " " VERSION, "(built " __DATE__ " " __TIME__ ")",
+    "",
+    "Copyright (C) 2000, 2001, 2002, 2003, 2004 Shawn Betts",
+    "",
+    "ratpoison is free software; you can redistribute it and/or modify ",
+    "it under the terms of the GNU General Public License as published by ",
+    "the Free Software Foundation; either version 2, or (at your option) ",
+    "any later version.",
+    "",
+    "ratpoison is distributed in the hope that it will be useful, ",
+    "but WITHOUT ANY WARRANTY; without even the implied warranty of ",
+    "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the ",
+    "GNU General Public License for more details.",
+    "",
+    "You should have received a copy of the GNU General Public License ",
+    "along with this software; see the file COPYING.  If not, write to ",
+    "the Free Software Foundation, Inc., 59 Temple Place, Suite 330, ",
+    "Boston, MA 02111-1307 USA",
+    "",
+    "Send bugreports, fixes, enhancements, t-shirts, money, beer & pizza ",
+    "to ratpoison-devel@nongnu.org or visit ",
+    "http://www.nongnu.org/ratpoison/",
+    "",
+    "[Press any key to end.] ",
+    NULL
+  };
 
   /* Switch to the default colormap. */
   if (current_window())
@@ -3372,7 +3375,10 @@ cmd_help (int interactive, struct cmdarg **args)
       int x = 10;
       int y = 0;
       int max_width = 0;
-      int drawing_keys = 1;             /* 1 if we are drawing keys 0 if we are drawing commands */
+
+      /* 1 if we are drawing keys, 0 if we are drawing commands */
+      int drawing_keys = 1;
+
       char *keysym_name;
 
       /* Switch to the default colormap. */
@@ -3493,7 +3499,8 @@ cmd_help (int interactive, struct cmdarg **args)
 
       for (i = 0; i < map->actions_last; i++)
         {
-          keysym_name = keysym_to_string (map->actions[i].key, map->actions[i].state);
+          keysym_name = keysym_to_string (map->actions[i].key, 
+                                          map->actions[i].state);
           sbuf_concat (help_list, keysym_name);
           free (keysym_name);
           sbuf_concat (help_list, " ");
@@ -3523,8 +3530,10 @@ cmd_rudeness (int interactive UNUSED, struct cmdarg **args)
                        | (rp_honour_normal_map << 3));
 
   num = ARG(0,number);
-  if (num < 0 || num > 15)
-    return cmdret_new (RET_FAILURE, "rudeness: invalid level '%s'", ARG_STRING(0));
+  if (num < 0 || num > 15) {
+    return cmdret_new (RET_FAILURE, 
+                       "rudeness: invalid level '%s'", ARG_STRING(0));
+  }
 
   rp_honour_transient_raise = num & 1 ? 1 : 0;
   rp_honour_normal_raise    = num & 2 ? 1 : 0;
@@ -3590,8 +3599,10 @@ cmd_gravity (int interactive UNUSED, struct cmdarg **args)
 static cmdret *
 set_wingravity (struct cmdarg **args)
 {
-  if (args[0] == NULL)
-    return cmdret_new (RET_SUCCESS, "%s", wingravity_to_string (defaults.win_gravity));
+  if (args[0] == NULL) {
+    return cmdret_new (RET_SUCCESS, 
+                       "%s", wingravity_to_string (defaults.win_gravity));
+  }
 
   defaults.win_gravity = ARG(0,gravity);
 
@@ -3601,8 +3612,10 @@ set_wingravity (struct cmdarg **args)
 static cmdret *
 set_transgravity (struct cmdarg **args)
 {
-  if (args[0] == NULL)
-    return cmdret_new (RET_SUCCESS, "%s", wingravity_to_string (defaults.trans_gravity));
+  if (args[0] == NULL) {
+    return cmdret_new (RET_SUCCESS, 
+                       "%s", wingravity_to_string (defaults.trans_gravity));
+  }
 
   defaults.trans_gravity = ARG(0,gravity);
 
@@ -3612,8 +3625,10 @@ set_transgravity (struct cmdarg **args)
 static cmdret *
 set_maxsizegravity (struct cmdarg **args)
 {
-  if (args[0] == NULL)
-    return cmdret_new (RET_SUCCESS, "%s", wingravity_to_string (defaults.maxsize_gravity));
+  if (args[0] == NULL) {
+    return cmdret_new (RET_SUCCESS, 
+                       "%s", wingravity_to_string (defaults.maxsize_gravity));
+  }
 
   defaults.maxsize_gravity = ARG(0,gravity);
 
@@ -3637,8 +3652,10 @@ cmd_msgwait (int interactive UNUSED, struct cmdarg **args)
 static cmdret *
 set_bargravity (struct cmdarg **args)
 {
-  if (args[0] == NULL)
-    return cmdret_new (RET_SUCCESS, "%s", wingravity_to_string (defaults.bar_location));
+  if (args[0] == NULL) {
+    return cmdret_new (RET_SUCCESS, 
+                       "%s", wingravity_to_string (defaults.bar_location));
+  }
 
   defaults.bar_location = ARG(0,gravity);
 
@@ -3856,9 +3873,15 @@ set_barborder (struct cmdarg **args)
   /* Update the frame and bar windows. */
   for (i=0; i<num_screens; i++)
     {
-      XSetWindowBorderWidth (dpy, screens[i].bar_window, defaults.bar_border_width);
-      XSetWindowBorderWidth (dpy, screens[i].frame_window, defaults.bar_border_width);
-      XSetWindowBorderWidth (dpy, screens[i].input_window, defaults.bar_border_width);
+      XSetWindowBorderWidth (dpy, 
+                             screens[i].bar_window, 
+                             defaults.bar_border_width);
+      XSetWindowBorderWidth (dpy,
+                             screens[i].frame_window, 
+                             defaults.bar_border_width);
+      XSetWindowBorderWidth (dpy, 
+                             screens[i].input_window, 
+                             defaults.bar_border_width);
     }
 
   return cmdret_new (RET_SUCCESS, NULL);
@@ -4145,10 +4168,9 @@ cmd_setenv (int interactive UNUSED, struct cmdarg **args)
   putenv (sbuf_get (env));
 
   /* According to the docs, the actual string is placed in the
-     environment, not the data the string points to. This means
-     modifying the string (or freeing it) directly changes the
-     environment. So, don't free the environment string, just the sbuf
-     data structure. */
+     environment, not the data the string points to. This means modifying the
+     string (or freeing it) directly changes the environment. So, don't free the
+     environment string, just the sbuf data structure. */
   env->data = NULL;
   sbuf_free (env);
 
@@ -4430,8 +4452,10 @@ set_barpadding (struct cmdarg **args)
 {
   int x, y;
 
-  if (args[0] == NULL)
-    return cmdret_new (RET_SUCCESS, "%d %d", defaults.bar_x_padding, defaults.bar_y_padding);
+  if (args[0] == NULL) {
+    return cmdret_new (RET_SUCCESS, 
+                       "%d %d", defaults.bar_x_padding, defaults.bar_y_padding);
+  }
 
   x = ARG(0,number);
   y = ARG(1,number);
@@ -4502,7 +4526,8 @@ cmd_nextscreen (int interactive UNUSED, struct cmdarg **args UNUSED)
   if (new_screen >= num_screens)
     new_screen = 0;
 
-  set_active_frame (screen_get_frame (&screens[new_screen], screens[new_screen].current_frame), 1);
+  set_active_frame (screen_get_frame (&screens[new_screen], 
+                                      screens[new_screen].current_frame), 1);
 
   return cmdret_new (RET_SUCCESS, NULL);
 }
@@ -4520,7 +4545,8 @@ cmd_prevscreen (int interactive UNUSED, struct cmdarg **args UNUSED)
   if (new_screen < 0)
     new_screen = num_screens - 1;
 
-  set_active_frame (screen_get_frame (&screens[new_screen], screens[new_screen].current_frame), 1);
+  set_active_frame (screen_get_frame (&screens[new_screen], 
+                                      screens[new_screen].current_frame), 1);
 
   return cmdret_new (RET_SUCCESS, NULL);
 }
@@ -4534,10 +4560,12 @@ cmd_sselect(int interactive UNUSED, struct cmdarg **args)
   if (new_screen < 0)
     return cmdret_new (RET_FAILURE, "sselect: out of range");
 
-  if (new_screen < num_screens)
-    set_active_frame (screen_get_frame (&screens[new_screen], screens[new_screen].current_frame), 1);
-  else
+  if (new_screen < num_screens) {
+    set_active_frame (screen_get_frame (&screens[new_screen], 
+                                        screens[new_screen].current_frame), 1);
+  } else {
     return cmdret_new (RET_FAILURE, "sselect: out of range");
+  }
 
   return cmdret_new (RET_SUCCESS, NULL);
 }
@@ -5233,7 +5261,8 @@ cmd_gdelete (int interactive UNUSED, struct cmdarg **args)
       return cmdret_new (RET_FAILURE, "gdelete: cannot delete the sole group");
       break;
     default:
-      return cmdret_new (RET_FAILURE, "gdelete: unknown return code (this shouldn't happen)");
+      return cmdret_new(RET_FAILURE, 
+                        "gdelete: unknown return code (this shouldn't happen)");
     }
 
   return cmdret_new (RET_SUCCESS, NULL);
@@ -5490,7 +5519,8 @@ cmd_sfrestore (int interactively UNUSED, struct cmdarg **args)
     /* convert to integer */
     x = strtol (ptr, NULL, 10);
 
-    /* check that specified screen number is not bigger than current number of connected screens */
+    /* check that specified screen number is not bigger than current number of
+     * connected screens */
     if (x < num_screens) {
       /* append frameset to buffer[x] */
       sbuf_concat(buffer[x], token);
@@ -5520,7 +5550,9 @@ cmd_sfrestore (int interactively UNUSED, struct cmdarg **args)
     return cmdret_new (RET_SUCCESS, "Restored %i Frame(s)", number_of_frames);
   }
   else {
-    return cmdret_new (RET_SUCCESS, "Restored %i Frame(s), %i Frame(s) out of Screen(s)", number_of_frames, out_of_screen);
+    return cmdret_new (RET_SUCCESS, 
+                       "Restored %i Frame(s), %i Frame(s) out of Screen(s)", 
+                       number_of_frames, out_of_screen);
   }
 }
 
@@ -5852,7 +5884,7 @@ cmd_dedicate (int interactive UNUSED, struct cmdarg **args)
     f->dedicated = !(f->dedicated);
 
   return cmdret_new (RET_SUCCESS, "Consider this frame %s.",
-                     f->dedicated ? "chaste":"promiscuous");
+                     f->dedicated ? "chaste" : "promiscuous");
 }
 
 cmdret *
@@ -5877,25 +5909,25 @@ cmd_getsel (int interactive UNUSED, struct cmdarg **args UNUSED)
 cmdret *
 cmd_compat (int interactive UNUSED, struct cmdarg **args UNUSED)
 {
-  add_alias ("defresizeunit", "set resizeunit");
-  add_alias ("defwingravity", "set wingravity");
-  add_alias ("deftransgravity", "set transgravity");
+  add_alias ("defresizeunit",     "set resizeunit");
+  add_alias ("defwingravity",     "set wingravity");
+  add_alias ("deftransgravity",   "set transgravity");
   add_alias ("defmaxsizegravity", "set maxsizegravity");
-  add_alias ("defbargravity", "set bargravity");
-  add_alias ("deffont", "set font");
-  add_alias ("defpadding", "set padding");
-  add_alias ("defborder", "set border");
-  add_alias ("defbarborder", "set barborder");
-  add_alias ("definputwidth", "set inputwidth");
-  add_alias ("defwaitcursor", "set waitcursor");
-  add_alias ("defwinfmt", "set winfmt");
-  add_alias ("defwinname", "set winname");
-  add_alias ("deffgcolor", "set fgcolor");
-  add_alias ("defbgcolor", "set bgcolor");
-  add_alias ("defbarpadding", "set barpadding");
-  add_alias ("defwinliststyle", "set winliststyle");
-  add_alias ("defframesels", "set framesels");
-  add_alias ("defmaxundos", "set maxundos");
+  add_alias ("defbargravity",     "set bargravity");
+  add_alias ("deffont",           "set font");
+  add_alias ("defpadding",        "set padding");
+  add_alias ("defborder",         "set border");
+  add_alias ("defbarborder",      "set barborder");
+  add_alias ("definputwidth",     "set inputwidth");
+  add_alias ("defwaitcursor",     "set waitcursor");
+  add_alias ("defwinfmt",         "set winfmt");
+  add_alias ("defwinname",        "set winname");
+  add_alias ("deffgcolor",        "set fgcolor");
+  add_alias ("defbgcolor",        "set bgcolor");
+  add_alias ("defbarpadding",     "set barpadding");
+  add_alias ("defwinliststyle",   "set winliststyle");
+  add_alias ("defframesels",      "set framesels");
+  add_alias ("defmaxundos",       "set maxundos");
 
   return cmdret_new (RET_SUCCESS, NULL);
 }
