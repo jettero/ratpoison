@@ -17,7 +17,6 @@
  * the Free Software Foundation, Inc., 59 Temple Place, Suite 330,
  * Boston, MA 02111-1307 USA
  */
-
 #include <unistd.h>
 #include <ctype.h>		/* for isspace */
 #include <sys/wait.h>
@@ -34,7 +33,6 @@
 #ifdef HAVE_LIBXTST
 #  include <X11/extensions/XTest.h>
 #endif
-
 
 #define ARG_STRING(elt) args[elt]->string
 #define ARG(elt, type)  args[elt]->arg.type
