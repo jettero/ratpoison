@@ -322,7 +322,7 @@ static void
 print_version (void)
 {
   printf ("%s %s (built %s %s)\n", PACKAGE, VERSION, __DATE__, __TIME__);
-  printf ("Copyright (C) 2000-2008 Shawn Betts\n\n");
+  printf ("Copyright (C) 2000-2008 Shawn Betts\n");
 
   exit (EXIT_SUCCESS);
 }
@@ -339,7 +339,7 @@ print_help (void)
   printf ("-i, --interactive     Execute commands in interactive mode\n");
   printf ("-f, --file <file>     Specify an alternative configuration file\n\n");
 
-  printf ("Report bugs to ratpoison-devel@nongnu.org\n\n");
+  printf ("Report bugs to ratpoison-devel@nongnu.org\n");
 
   exit (EXIT_SUCCESS);
 }
