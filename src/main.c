@@ -526,25 +526,7 @@ init_defaults (void)
   defaults.padding_top    = 0;
   defaults.padding_bottom = 0;
 
-#ifdef USE_XFT_FONT
   defaults.font_string = xstrdup (DEFAULT_XFT_FONT);
-#else
-  /* Attempt to load a font */
-  defaults.font = load_query_font_set (dpy, DEFAULT_FONT);
-  if (defaults.font == NULL)
-    {
-      PRINT_ERROR (("ratpoison: Cannot load font %s.\n", DEFAULT_FONT));
-      defaults.font = load_query_font_set (dpy, BACKUP_FONT);
-      if (defaults.font == NULL)
-        {
-          PRINT_ERROR (("ratpoison: Cannot load backup font %s . You lose.\n", BACKUP_FONT));
-          exit (EXIT_FAILURE);
-        }
-    }
-
-  defaults.font_string = xstrdup (DEFAULT_FONT);
-  set_extents_of_fontset (defaults.font);
-#endif
 
   defaults.timefmt_string = xstrdup ("%a %b %d %k:%M:%S %Y");
 
@@ -775,7 +757,6 @@ free_screen (rp_screen *s)
   XDestroyWindow (dpy, s->frame_window);
   XDestroyWindow (dpy, s->help_window);
 
-#ifdef USE_XFT_FONT
   if (s->xft_font)
     {
       XftColorFree (dpy, DefaultVisual (dpy, s->screen_num),
@@ -784,7 +765,6 @@ free_screen (rp_screen *s)
                     DefaultColormap (dpy, s->screen_num), &s->xft_bg_color);
       XftFontClose (dpy, s->xft_font);
     }
-#endif
 
   XFreeCursor (dpy, s->rat);
   XFreeColormap (dpy, s->def_cmap);
@@ -828,9 +808,6 @@ clean_up (void)
 
   free_xinerama();
 
-#ifndef USE_XFT_FONT
-  XFreeFontSet (dpy, defaults.font);
-#endif
   free (defaults.window_fmt);
 
   XSetInputFocus (dpy, PointerRoot, RevertToPointerRoot, CurrentTime);

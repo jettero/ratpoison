@@ -350,7 +350,6 @@ init_screen (rp_screen *s, int screen_num)
 
   XSync (dpy, 0);
 
-#ifdef USE_XFT_FONT
   {
     s->xft_font = XftFontOpenName (dpy, screen_num, DEFAULT_XFT_FONT);
     if (!s->xft_font)
@@ -377,7 +376,6 @@ init_screen (rp_screen *s, int screen_num)
           }
       }
   }
-#endif
 }
 
 void

@@ -281,7 +281,6 @@ rp_draw_string (rp_screen *s, Drawable d, int style, int x, int y, char *string,
   if (length < 0)
     length = strlen (string);
 
-#ifdef USE_XFT_FONT
   if (s->xft_font)
     {
       XftDraw *draw;
@@ -296,21 +295,15 @@ rp_draw_string (rp_screen *s, Drawable d, int style, int x, int y, char *string,
         PRINT_ERROR(("Failed to allocate XftDraw object\n"));
     }
   else
-#endif
     XmbDrawString (dpy, d, defaults.font, style == STYLE_NORMAL ? s->normal_gc:s->inverse_gc, x, y, string, length);
 }
 
 int
-#ifdef USE_XFT_FONT
 rp_text_width (rp_screen *s, XFontSet font, char *string, int count)
-#else
-rp_text_width (rp_screen *s UNUSED, XFontSet font, char *string, int count)
-#endif
 {
   if (count < 0)
     count = strlen (string);
 
-#ifdef USE_XFT_FONT
   if (s->xft_font)
     {
       XGlyphInfo extents;
@@ -318,7 +311,6 @@ rp_text_width (rp_screen *s UNUSED, XFontSet font, char *string, int count)
       return extents.xOff;
     }
   else
-#endif
     return XmbTextEscapement (font, string, count);
 }
 
