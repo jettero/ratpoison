@@ -2671,7 +2671,9 @@ cmd_quit(int interactive UNUSED, struct cmdarg **args UNUSED)
    <krooger@debian.org> for making it pretty. 
    
    Christian Koch <cfkoch@sdf.lonestar.org> changed the implementation from
-   ctime() to strftime(). */
+   ctime() to strftime(). 
+   
+   TODO: Get rid of all the magic numbers. */
 cmdret *
 cmd_time (int interactive UNUSED, struct cmdarg **args UNUSED)
 {
