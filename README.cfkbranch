@@ -1,0 +1,51 @@
+#
+# Ratpoison
+# The CFK Branch
+#
+# Christian Koch <cfkoch@sdf.lonestar.org>
+#
+
+This branch of the repo consists of an extensive series of hacks, fixes,
+additions and other changes to the Ratpoison window manager. Here's an outline
+of the differences between the Ratpoison you see here and the ``canonical''
+Ratpoison.
+
+The big differences:
+
+  * Xft is required. You have to have it installed in order to run this version
+    of Ratpoison.
+  
+  * You can change the format of the :time command, with :set timefmt.
+
+  * The ``def'' commands (the setter functions for what are now :set options)
+    are totally gone.
+
+
+The not so big differences:
+
+  * No debian/ directory.
+
+  * No RPM spec.
+
+  * No ipaq.ratpoisonrc.
+
+  * configure.in produces a configure script which actually works on OS X
+    10.5.8.
+  
+  * sbufs are now documented. They're actually a really snazzy and
+    simple interface to strings which other developers could use.
+
+
+Stuff I want to do:
+
+  * Make TERM_PROG a :set option instead of a compile-time option.
+
+  * Document pretty much everything.
+
+  * Fix every single FIXME and do every TODO.
+
+  * Get rid of every trace of GNU style and replace it with BSD KNF, or similar.
+    I find the GNU style really hard to read =\ At that point, this branch will
+    become a full-out fork, I fear =)
+  
+  * Implement rpbar (see github.com/dimatura/rpbar).
