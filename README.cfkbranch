@@ -34,6 +34,8 @@ The not so big differences:
   
   * sbufs are now documented. They're actually a really snazzy and
     simple interface to strings which other developers could use.
+  
+  * :fdump and :sfdump don't have trailing commas.
 
 
 Stuff I want to do:

@@ -5074,24 +5074,27 @@ cmd_fselect (int interactive, struct cmdarg **args)
 static char *
 fdump (rp_screen *screen)
 {
-  struct sbuf *s;
+  struct sbuf *s1, *s2;
   char *tmp;
   rp_frame *cur;
 
-  s = sbuf_new (0);
+  s1 = sbuf_new (0);
+  s2 = sbuf_new (0);
 
-  /* FIXME: Oooh, gross! there's a trailing comma, yuk! */
-  list_for_each_entry (cur, &(screen->frames), node)
-    {
-      char *t;
+  list_for_each_entry (cur, &(screen->frames), node) {
+    char *t;
 
-      t = frame_dump (cur, screen);
-      sbuf_concat (s, t);
-      sbuf_concat (s, ",");
-      free (t);
-    }
+    t = frame_dump (cur, screen);
+    sbuf_concat (s1, t);
+    sbuf_concat (s1, ",");
+    free (t);
+  }
 
-  tmp = sbuf_free_struct (s);
+  /* Strip the trailing comma. */
+  tmp = sbuf_free_struct (s1);
+  sbuf_nconcat(s2, tmp, strlen(tmp) - 1);
+
+  tmp = sbuf_free_struct (s2);
   return tmp;
 }
 
@@ -5696,32 +5699,36 @@ cmdret *
 cmd_sfdump (int interactively UNUSED, struct cmdarg **args UNUSED)
 {
   cmdret *ret;
-  struct sbuf *s;
-  char *tmp2;
+  struct sbuf *s1, *s2;
+  char *tmp2, *tmp3;
   rp_frame *cur;
   int i;
 
-  s = sbuf_new (0);
+  s1 = sbuf_new (0);
+  s2 = sbuf_new (0);
 
   for (i=0; i<num_screens; i++)
     {
       tmp2 = xsprintf (" %d,", (rp_have_xinerama)?(screens[i].xine_screen_num):(screens[i].screen_num));
 
-      /* FIXME: Oooh, gross! there's a trailing comma, yuk! */
-      list_for_each_entry (cur, &(screens[i].frames), node)
-        {
-          char *tmp;
+      list_for_each_entry (cur, &(screens[i].frames), node) {
+        char *tmp;
 
-	  tmp = frame_dump (cur, &screens[i]);
-          sbuf_concat (s, tmp);
-          sbuf_concat (s, tmp2);
-          free (tmp);
-        }
+        tmp = frame_dump (cur, &screens[i]);
+        sbuf_concat (s1, tmp);
+        sbuf_concat (s1, tmp2);
+        free (tmp);
+      }
+
+      /* Strip the trailing comma. */
+      tmp3 = sbuf_free_struct(s1);
+      sbuf_nconcat(s2, tmp3, strlen(tmp3) - 1);
 
       free (tmp2);
     }
-  ret = cmdret_new (RET_SUCCESS, "%s", sbuf_get (s));
-  sbuf_free (s);
+
+  ret = cmdret_new (RET_SUCCESS, "%s", sbuf_get(s2));
+  sbuf_free(s2);
   return ret;
 }
 
