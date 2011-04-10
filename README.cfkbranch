@@ -23,11 +23,11 @@ The big differences:
 
 The not so big differences:
 
-  * No debian/ directory.
-
-  * No RPM spec.
-
-  * No ipaq.ratpoisonrc.
+  * These files and directories have been simply wiped out:
+    - debian/
+    - the RPM spec
+    - ipaq.ratpoisonrc
+    - FAQ, MERCHANDISE, and that giant-ass ChangeLog
 
   * configure.in produces a configure script which actually works on OS X
     10.5.8.
