@@ -30,11 +30,13 @@ screen_width (rp_screen *s)
   return s->width - defaults.padding_right - defaults.padding_left;
 }
 
+
 int
 screen_height (rp_screen *s)
 {
   return s->height - defaults.padding_bottom - defaults.padding_top;
 }
+
 
 int
 screen_left (rp_screen *s)
@@ -42,11 +44,13 @@ screen_left (rp_screen *s)
   return s->left + defaults.padding_left;
 }
 
+
 int
 screen_right (rp_screen *s)
 {
   return screen_left (s) + screen_width (s);
 }
+
 
 int
 screen_top (rp_screen *s)
@@ -54,13 +58,17 @@ screen_top (rp_screen *s)
   return s->top + defaults.padding_top;
 }
 
+
 int
 screen_bottom (rp_screen *s)
 {
   return screen_top (s) + screen_height (s);
 }
 
-/* Returns a pointer to a list of frames. */
+
+/* 
+ * Returns a pointer to a list of frames.
+ */
 struct list_head *
 screen_copy_frameset (rp_screen *s)
 {
@@ -80,7 +88,10 @@ screen_copy_frameset (rp_screen *s)
   return head;
 }
 
-/* Set head as the frameset, deleting the existing one. */
+
+/* 
+ * Set head as the frameset, deleting the existing one.
+ */
 void
 screen_restore_frameset (rp_screen *s, struct list_head *head)
 {
@@ -92,7 +103,9 @@ screen_restore_frameset (rp_screen *s, struct list_head *head)
 }
 
 
-/* Given a screen, free the frames' numbers from the numset. */
+/*
+ * Given a screen, free the frames' numbers from the numset.
+ */
 void
 screen_free_nums (rp_screen *s)
 {
@@ -104,8 +117,11 @@ screen_free_nums (rp_screen *s)
     }
 }
 
-/* Given a list of frames, free them, but don't remove their numbers
-   from the numset. */
+
+/* 
+ * Given a list of frames, free them, but don't remove their numbers from the
+ * numset. 
+ */
 void
 frameset_free (struct list_head *head)
 {
@@ -120,6 +136,7 @@ frameset_free (struct list_head *head)
     }
 }
 
+
 rp_frame *
 screen_get_frame (rp_screen *s, int frame_num)
 {
@@ -133,6 +150,7 @@ screen_get_frame (rp_screen *s, int frame_num)
 
   return NULL;
 }
+
 
 rp_frame *
 screen_find_frame_by_frame (rp_screen *s, rp_frame *f)
@@ -149,7 +167,10 @@ screen_find_frame_by_frame (rp_screen *s, rp_frame *f)
   return NULL;
 }
 
-/* Given a root window, return the rp_screen struct */
+
+/*
+ * Given a root window, return the rp_screen struct.
+ */
 rp_screen *
 find_screen (Window w)
 {
@@ -161,7 +182,10 @@ find_screen (Window w)
    return NULL;
  }
 
-/* Return 1 if w is a root window of any of the screens. */
+
+/* 
+ * Return 1 if w is a root window of any of the screens.
+ */
 int
 is_a_root_window (unsigned int w)
 {
@@ -171,6 +195,7 @@ is_a_root_window (unsigned int w)
 
   return 0;
 }
+
 
 void
 init_screens (int screen_arg, int screen_num)
@@ -225,14 +250,15 @@ init_screens (int screen_arg, int screen_num)
           init_screen (&screens[i], i);
         }
     }
-
 }
+
 
 static void
 init_rat_cursor (rp_screen *s)
 {
   s->rat = XCreateFontCursor( dpy, XC_icon );
 }
+
 
 static void
 init_screen (rp_screen *s, int screen_num)
@@ -378,6 +404,7 @@ init_screen (rp_screen *s, int screen_num)
   }
 }
 
+
 void
 activate_screen (rp_screen *s)
 {
@@ -393,6 +420,7 @@ activate_screen (rp_screen *s)
   XMapWindow (dpy, s->key_window);
 }
 
+
 void
 deactivate_screen (rp_screen *s)
 {
@@ -406,6 +434,7 @@ deactivate_screen (rp_screen *s)
 		   _net_wm_name);
 }
 
+
 static int
 is_rp_window_for_given_screen (Window w, rp_screen *s)
 {
@@ -417,6 +446,7 @@ is_rp_window_for_given_screen (Window w, rp_screen *s)
     return 0;
   return 1;
 }
+
 
 int
 is_rp_window_for_screen(Window w, rp_screen *s)
@@ -434,6 +464,7 @@ is_rp_window_for_screen(Window w, rp_screen *s)
       return is_rp_window_for_given_screen(w, s);
     }
 }
+
 
 char *
 screen_dump (rp_screen *screen)
@@ -456,6 +487,7 @@ screen_dump (rp_screen *screen)
   free (s);
   return tmp;
 }
+
 
 void
 screen_update (rp_screen *s, int width, int height)

@@ -47,7 +47,10 @@ static int last_mark_end = 0;
 
 static void marked_message_internal (char *msg, int mark_start, int mark_end);
 
-/* Reset the alarm to auto-hide the bar in BAR_TIMEOUT seconds. */
+
+/* 
+ * Reset the alarm to auto-hide the bar in BAR_TIMEOUT seconds.
+ */
 static void
 reset_alarm (void)
 {
@@ -55,7 +58,10 @@ reset_alarm (void)
   alarm_signalled = 0;
 }
 
-/* Hide the bar from sight. */
+
+/* 
+ * Hide the bar from sight.
+ */
 int
 hide_bar (rp_screen *s)
 {
@@ -77,7 +83,10 @@ hide_bar (rp_screen *s)
   return 0;
 }
 
-/* Show window listing in bar. */
+
+/* 
+ * Show window listing in bar.
+ */
 int
 show_bar (rp_screen *s, char *fmt)
 {
@@ -101,6 +110,7 @@ show_bar (rp_screen *s, char *fmt)
   update_window_names (s, fmt);
   return 0;
 }
+
 
 int
 bar_x (rp_screen *s, int width)
@@ -130,6 +140,7 @@ bar_x (rp_screen *s, int width)
 
   return x;
 }
+
 
 int
 bar_y (rp_screen *s, int height)
@@ -162,6 +173,7 @@ bar_y (rp_screen *s, int height)
   return y;
 }
 
+
 void
 update_bar (rp_screen *s)
 {
@@ -176,8 +188,10 @@ update_bar (rp_screen *s)
   redraw_last_message();
 }
 
-/* Note that we use marked_message_internal to avoid resetting the
-   alarm. */
+
+/* 
+ * Note that we use marked_message_internal to avoid resetting the alarm.
+ */
 void
 update_window_names (rp_screen *s, char *fmt)
 {
@@ -200,16 +214,17 @@ update_window_names (rp_screen *s, char *fmt)
       marked_message_internal (sbuf_get (bar_buffer), mark_start, mark_end);
     }
 
-
-/*   marked_message (sbuf_get (bar_buffer), mark_start, mark_end); */
+  /* marked_message (sbuf_get (bar_buffer), mark_start, mark_end); */
   sbuf_free (bar_buffer);
 }
+
 
 void
 message (char *s)
 {
   marked_message (s, 0, 0);
 }
+
 
 void
 marked_message_printf (int mark_start, int mark_end, char *fmt, ...)
@@ -224,6 +239,7 @@ marked_message_printf (int mark_start, int mark_end, char *fmt, ...)
   marked_message (buffer, mark_start, mark_end);
   free (buffer);
 }
+
 
 static int
 count_lines (char* msg, int len)
@@ -273,6 +289,7 @@ max_line_length (char* msg)
   return ret;
 }
 
+
 static int
 pos_in_line (char* msg, int pos)
 {
@@ -293,6 +310,7 @@ pos_in_line (char* msg, int pos)
 
   return ret;
 }
+
 
 static int
 line_beginning (char* msg, int pos)
@@ -317,6 +335,7 @@ line_beginning (char* msg, int pos)
   return ret;
 }
 
+
 static void
 draw_partial_string (rp_screen *s, char *msg, int line_no, int start, int end, int style)
 {
@@ -328,6 +347,7 @@ draw_partial_string (rp_screen *s, char *msg, int line_no, int start, int end, i
                   + line_no * line_height,
                   msg + start, end - start + 1);
 }
+
 
 static void
 draw_string (rp_screen *s, char *msg, int mark_start, int mark_end)
@@ -347,8 +367,8 @@ draw_string (rp_screen *s, char *msg, int mark_start, int mark_end)
   /* Walk through the string, print each line. */
   start = 0;
   line_no = 0;
-/*   if (mark_start == 0 && mark_end == 0) */
-/*     mark_start = mark_end = -1; */
+  /* if (mark_start == 0 && mark_end == 0) */
+  /*   mark_start = mark_end = -1; */
 
   for(i=0; i < strlen(msg); ++i)
     {
@@ -383,8 +403,11 @@ draw_string (rp_screen *s, char *msg, int mark_start, int mark_end)
   XSync (dpy, False);
 }
 
-/* Move the marks if they are outside the string or if the start is
-   after the end. */
+
+/* 
+ * Move the marks if they are outside the string or if the start is after the
+ * end. 
+ */
 static void
 correct_mark (int msg_len, int *mark_start, int *mark_end)
 {
@@ -412,7 +435,10 @@ correct_mark (int msg_len, int *mark_start, int *mark_end)
 
 }
 
-/* Raise the bar and put it in the right spot */
+
+/* 
+ * Raise the bar and put it in the right spot.
+ */
 static void
 prepare_bar (rp_screen *s, int width, int height)
 {
@@ -438,6 +464,7 @@ prepare_bar (rp_screen *s, int width, int height)
   XClearWindow (dpy, s->bar_window);
   XSync (dpy, False);
 }
+
 
 static void
 get_mark_box (char *msg, size_t mark_start, size_t mark_end,
@@ -504,6 +531,7 @@ get_mark_box (char *msg, size_t mark_start, size_t mark_end,
   *height = (end_line - start_line + 1) * FONT_HEIGHT (s);
 }
 
+
 static void
 draw_box (rp_screen *s, int x, int y, int width, int height)
 {
@@ -520,6 +548,7 @@ draw_box (rp_screen *s, int x, int y, int width, int height)
   XFreeGC (dpy, lgc);
 }
 
+
 static void
 draw_mark (rp_screen *s, char *msg, int mark_start, int mark_end)
 {
@@ -534,6 +563,7 @@ draw_mark (rp_screen *s, char *msg, int mark_start, int mark_end)
   draw_box (s, x, y, width, height);
 }
 
+
 static void
 update_last_message (char *msg, int mark_start, int mark_end)
 {
@@ -544,6 +574,7 @@ update_last_message (char *msg, int mark_start, int mark_end)
   last_mark_end = mark_end;
 }
 
+
 void
 marked_message (char *msg, int mark_start, int mark_end)
 {
@@ -551,6 +582,7 @@ marked_message (char *msg, int mark_start, int mark_end)
   reset_alarm ();
   marked_message_internal (msg, mark_start, mark_end);
 }
+
 
 static void
 marked_message_internal (char *msg, int mark_start, int mark_end)
@@ -580,8 +612,11 @@ marked_message_internal (char *msg, int mark_start, int mark_end)
   update_last_message (msg, mark_start, mark_end);
 }
 
-/* Use this just to update the bar. show_last_message will draw it and
-   leave it up for a period of time. */
+
+/* 
+ * Use this just to update the bar. show_last_message will draw it and leave it
+ * up for a period of time.
+ */
 void
 redraw_last_message (void)
 {
@@ -598,6 +633,7 @@ redraw_last_message (void)
   free (msg);
 }
 
+
 void
 show_last_message (void)
 {
@@ -605,7 +641,10 @@ show_last_message (void)
   reset_alarm();
 }
 
-/* Free any memory associated with the bar. */
+
+/* 
+ * Free any memory associated with the bar.
+ */
 void
 free_bar (void)
 {

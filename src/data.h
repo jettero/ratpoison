@@ -41,8 +41,7 @@ typedef struct rp_window_elem rp_window_elem;
 typedef struct rp_completions rp_completions;
 typedef struct rp_input_line  rp_input_line;
 
-struct rp_frame
-{
+struct rp_frame {
   int number;
   int x, y, width, height;
 
@@ -59,8 +58,7 @@ struct rp_frame
   struct list_head node;
 };
 
-struct rp_window
-{
+struct rp_window {
   rp_screen *scr;
   Window w;
   int state;
@@ -111,8 +109,7 @@ struct rp_window
   struct list_head node;
 };
 
-struct rp_window_elem
-{
+struct rp_window_elem {
   rp_window *win;
   int number;
   struct list_head node;
@@ -125,8 +122,8 @@ struct rp_window_elem
    window list and will not be accessible with select, next, or
    prev. These window navigation commands only navigate the current
    group. */
-struct rp_group
-{
+struct rp_group {
+
   /* The name and number of this group. This is to allow the user to
      quickly jump to the desired group. */
   char *name;
@@ -146,8 +143,7 @@ struct rp_group
   struct list_head node;
 };
 
-struct rp_screen
-{
+struct rp_screen {
   GC normal_gc, inverse_gc;
   Window root, bar_window, key_window, input_window, frame_window, help_window;
   int bar_is_raised;
@@ -177,16 +173,14 @@ struct rp_screen
   XftColor xft_fg_color, xft_bg_color;
 };
 
-struct rp_action
-{
+struct rp_action {
   KeySym key;
   unsigned int state;
   char *data;                   /* misc data to be passed to the function */
 /*   void (*func)(void *); */
 };
 
-struct rp_keymap
-{
+struct rp_keymap {
   char *name;
   rp_action *actions;
   int actions_last;
@@ -196,14 +190,12 @@ struct rp_keymap
   struct list_head node;
 };
 
-struct rp_key
-{
+struct rp_key {
   KeySym sym;
   unsigned int state;
 };
 
-struct rp_defaults
-{
+struct rp_defaults {
   /* Default positions for new normal windows, transient windows, and
      normal windows with maxsize hints. */
   int win_gravity;
@@ -274,8 +266,8 @@ struct rp_defaults
 };
 
 /* Information about a child process. */
-struct rp_child_info
-{
+struct rp_child_info { 
+
   /* The command that was executed. */
   char *cmd;
 
@@ -312,9 +304,8 @@ struct rp_child_info
 #define RP_SUPER_MASK   16
 #define RP_HYPER_MASK   32
 
-struct modifier_info
-{
-/*   unsigned int mode_switch_mask; */
+struct modifier_info {
+  /* unsigned int mode_switch_mask; */
   unsigned int meta_mod_mask;
   unsigned int alt_mod_mask;
   unsigned int super_mod_mask;
@@ -328,8 +319,7 @@ struct modifier_info
 
 typedef struct list_head *(*completion_fn)(char *string);
 
-struct rp_completions
-{
+struct rp_completions {
   /* A pointer to the partial string that is being completed. We need
      to store this so that the user can cycle through all possible
      completions. */
@@ -350,8 +340,7 @@ struct rp_completions
   unsigned short int virgin;
 };
 
-struct rp_input_line
-{
+struct rp_input_line {
   char *buffer;
   char *prompt;
   char *saved;
@@ -364,23 +353,20 @@ struct rp_input_line
 };
 
 /* The hook dictionary. */
-struct rp_hook_db_entry
-{
+struct rp_hook_db_entry {
   char *name;
   struct list_head *hook;
 };
 
 typedef struct rp_frame_undo rp_frame_undo;
-struct rp_frame_undo
-{
+struct rp_frame_undo {
   char *frames;
   rp_screen *screen;
   struct list_head node;
 };
 
 typedef struct rp_xselection rp_xselection;
-struct rp_xselection
-{
+struct rp_xselection {
   char *text;
   int len;
 };

@@ -33,6 +33,7 @@ int xine_screen_count;
 static XineramaScreenInfo *xine_screens = NULL;
 #endif
 
+
 void
 init_xinerama(void)
 {
@@ -70,6 +71,7 @@ init_xinerama(void)
         rp_have_xinerama = 0;
 #endif
 }
+
 
 #ifdef XINERAMA
 void xinerama_get_screen_info(int sc, int *x, int *y, int *w, int *h)

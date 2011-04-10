@@ -30,7 +30,9 @@
 #include "ratpoison.h"
 
 
-/* Sending commands to ratpoison */
+/* 
+ * Sending commands to ratpoison.
+ */
 static void
 receive_command_result (Window w)
 {
@@ -84,6 +86,7 @@ receive_command_result (Window w)
   /* Free the result. */
   XFree (result);
 }
+
 
 int
 send_command (unsigned char interactive, unsigned char *cmd, int screen_num)

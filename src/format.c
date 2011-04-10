@@ -76,7 +76,10 @@ struct fmt_item fmt_items[] = {
   { 0, NULL }
 };
 
-/* if width >= 0 then limit the width of s to width chars. */
+
+/*
+ * if width >= 0 then limit the width of s to width chars.
+ */
 static void
 concat_width (struct sbuf *buf, char *s, int width)
 {
@@ -91,6 +94,7 @@ concat_width (struct sbuf *buf, char *s, int width)
   else
     sbuf_concat (buf, s);
 }
+
 
 void
 format_string (char *fmt, rp_window_elem *win_elem, struct sbuf *buffer)
@@ -166,6 +170,7 @@ format_string (char *fmt, rp_window_elem *win_elem, struct sbuf *buffer)
 #undef STATE_NUMBER
 }
 
+
 static void
 fmt_framenum (rp_window_elem *win_elem, struct sbuf *buf)
 {
@@ -177,11 +182,13 @@ fmt_framenum (rp_window_elem *win_elem, struct sbuf *buf)
     sbuf_copy (buf, " ");
 }
 
+
 static void
 fmt_lastaccess (rp_window_elem *win_elem, struct sbuf *buf)
 {
   sbuf_printf_concat (buf, "%d", win_elem->win->last_access);
 }
+
 
 static void
 fmt_name (rp_window_elem *win_elem, struct sbuf *buf)
@@ -189,11 +196,13 @@ fmt_name (rp_window_elem *win_elem, struct sbuf *buf)
   sbuf_copy(buf, window_name (win_elem->win));
 }
 
+
 static void
 fmt_number (rp_window_elem *win_elem, struct sbuf *buf)
 {
   sbuf_printf_concat (buf, "%d", win_elem->number);
 }
+
 
 static void
 fmt_resname (rp_window_elem *win_elem, struct sbuf *buf)
@@ -204,6 +213,7 @@ fmt_resname (rp_window_elem *win_elem, struct sbuf *buf)
     sbuf_copy (buf, "None");
 }
 
+
 static void
 fmt_resclass (rp_window_elem *win_elem, struct sbuf *buf)
 {
@@ -212,6 +222,7 @@ fmt_resclass (rp_window_elem *win_elem, struct sbuf *buf)
   else
     sbuf_copy (buf, "None");
 }
+
 
 static void
 fmt_status (rp_window_elem *win_elem, struct sbuf *buf)
@@ -227,11 +238,13 @@ fmt_status (rp_window_elem *win_elem, struct sbuf *buf)
     sbuf_copy (buf, "-");
 }
 
+
 static void
 fmt_windowid (rp_window_elem *elem, struct sbuf *buf)
 {
   sbuf_printf_concat (buf, "%ld", (unsigned long)elem->win->w);
 }
+
 
 static void
 fmt_height (rp_window_elem *elem, struct sbuf *buf)
@@ -239,11 +252,13 @@ fmt_height (rp_window_elem *elem, struct sbuf *buf)
   sbuf_printf_concat (buf, "%d", elem->win->height);
 }
 
+
 static void
 fmt_width (rp_window_elem *elem, struct sbuf *buf)
 {
   sbuf_printf_concat (buf, "%d", elem->win->width);
 }
+
 
 static void
 fmt_incheight (rp_window_elem *elem, struct sbuf *buf)
@@ -257,6 +272,7 @@ fmt_incheight (rp_window_elem *elem, struct sbuf *buf)
   sbuf_printf_concat (buf, "%d", height);
 }
 
+
 static void
 fmt_incwidth (rp_window_elem *elem, struct sbuf *buf)
 {
@@ -269,11 +285,13 @@ fmt_incwidth (rp_window_elem *elem, struct sbuf *buf)
   sbuf_printf_concat (buf, "%d", width);
 }
 
+
 static void
 fmt_gravity (rp_window_elem *elem, struct sbuf *buf)
 {
   sbuf_copy (buf, wingravity_to_string (elem->win->gravity));
 }
+
 
 static void
 fmt_screen (rp_window_elem *elem, struct sbuf *buf)
@@ -281,11 +299,13 @@ fmt_screen (rp_window_elem *elem, struct sbuf *buf)
   sbuf_printf_concat (buf, "%d", elem->win->scr->screen_num);
 }
 
+
 static void
 fmt_xinescreen (rp_window_elem *elem, struct sbuf *buf)
 {
   sbuf_printf_concat (buf, "%d", elem->win->scr->xine_screen_num);
 }
+
 
 static void
 fmt_transient (rp_window_elem *elem, struct sbuf *buf)
@@ -294,12 +314,14 @@ fmt_transient (rp_window_elem *elem, struct sbuf *buf)
     sbuf_concat (buf, "Transient");
 }
 
+
 static void
 fmt_maxsize (rp_window_elem *elem, struct sbuf *buf)
 {
   if (elem->win->hints->flags & PMaxSize)
     sbuf_concat (buf, "Maxsize");
 }
+
 
 static void
 fmt_pid (rp_window_elem *elem, struct sbuf *buf)

@@ -42,7 +42,10 @@
    action.c which need to forward events to other windows. */
 XEvent rp_current_event;
 
-/* RAISED is non zero if a raised message should be used 0 for a map message. */
+
+/* 
+ * RAISED is non zero if a raised message should be used 0 for a map message.
+ */
 void
 show_rudeness_msg (rp_window *win, int raised)
 {
@@ -67,6 +70,7 @@ show_rudeness_msg (rp_window *win, int raised)
                                elem->number, window_name (win), g->name);
     }
 }
+
 
 static void
 new_window (XCreateWindowEvent *e)
@@ -104,6 +108,7 @@ new_window (XCreateWindowEvent *e)
       update_window_information (win);
     }
 }
+
 
 static void
 unmap_notify (XEvent *ev)
@@ -150,6 +155,7 @@ unmap_notify (XEvent *ev)
 
   update_window_names (win->scr, defaults.window_fmt);
 }
+
 
 static void
 map_request (XEvent *ev)
@@ -206,6 +212,7 @@ map_request (XEvent *ev)
     }
 }
 
+
 static void
 destroy_window (XDestroyWindowEvent *ev)
 {
@@ -248,6 +255,7 @@ destroy_window (XDestroyWindowEvent *ev)
   unmanage (win);
   ignore_badwindow--;
 }
+
 
 static void
 configure_request (XConfigureRequestEvent *e)
@@ -348,6 +356,7 @@ configure_request (XConfigureRequestEvent *e)
     }
 }
 
+
 static void
 client_msg (XClientMessageEvent *ev)
 {
@@ -384,6 +393,7 @@ client_msg (XClientMessageEvent *ev)
         }
     }
 }
+
 
 static void
 handle_key (KeySym ks, unsigned int mod, rp_screen *s)
@@ -435,6 +445,7 @@ handle_key (KeySym ks, unsigned int mod, rp_screen *s)
     }
 }
 
+
 static void
 key_press (XEvent *ev)
 {
@@ -459,10 +470,12 @@ key_press (XEvent *ev)
   handle_key (ks, modifier, s);
 }
 
-/* Read a command off the window and execute it. Some commands return
-   text. This text is passed back using the RP_COMMAND_RESULT
-   Atom. The client will wait for this property change so something
-   must be returned. */
+
+/* 
+ * Read a command off the window and execute it. Some commands return text. This
+ * text is passed back using the RP_COMMAND_RESULT Atom. The client will wait
+ * for this property change so something must be returned. 
+ */
 static cmdret *
 execute_remote_command (Window w)
 {
@@ -505,11 +518,13 @@ execute_remote_command (Window w)
   return ret;
 }
 
-/* Command requests are posted as a property change using the
-   RP_COMMAND_REQUEST Atom on the root window. A Command request is a
-   Window that holds the actual command as a property using the
-   RP_COMMAND Atom. receive_command reads the list of Windows and
-   executes their associated command. */
+
+/* 
+ * Command requests are posted as a property change using the RP_COMMAND_REQUEST
+ * Atom on the root window. A Command request is a Window that holds the actual
+ * command as a property using the RP_COMMAND Atom. receive_command reads the
+ * list of Windows and executes their associated command.
+ */
 static void
 receive_command (Window root)
 {
@@ -583,6 +598,7 @@ receive_command (Window root)
     } while (bytes_after > 0);
 }
 
+
 static void
 property_notify (XEvent *ev)
 {
@@ -649,6 +665,7 @@ property_notify (XEvent *ev)
     }
 }
 
+
 static void
 colormap_notify (XEvent *ev)
 {
@@ -677,6 +694,7 @@ colormap_notify (XEvent *ev)
     }
 }
 
+
 static void
 focus_change (XFocusChangeEvent *ev)
 {
@@ -693,6 +711,7 @@ focus_change (XFocusChangeEvent *ev)
       grab_top_level_keys (win->w);
     }
 }
+
 
 static void
 mapping_notify (XMappingEvent *ev)
@@ -712,6 +731,7 @@ mapping_notify (XMappingEvent *ev)
   grab_keys_all_wins();
 }
 
+
 static void
 configure_notify (XConfigureEvent *ev)
 {
@@ -724,8 +744,11 @@ configure_notify (XConfigureEvent *ev)
     screen_update(s,ev->width,ev->height);
 }
 
-/* This is called whan an application has requested the
-   selection. Copied from rxvt. */
+
+/* 
+ * This is called whan an application has requested the
+ * selection. Copied from rxvt.
+ */
 static void
 selection_request (XSelectionRequestEvent *rq)
 {
@@ -785,6 +808,7 @@ selection_request (XSelectionRequestEvent *rq)
   XSendEvent(dpy, rq->requestor, False, 0, &ev);
 }
 
+
 static void
 selection_clear (void)
 {
@@ -794,7 +818,10 @@ selection_clear (void)
   selection.len = 0;
 }
 
-/* Given an event, call the correct function to handle it. */
+
+/*
+ * Given an event, call the correct function to handle it.
+ */
 static void
 delegate_event (XEvent *ev)
 {
@@ -889,6 +916,7 @@ delegate_event (XEvent *ev)
     }
 }
 
+
 static void
 handle_signals (void)
 {
@@ -982,7 +1010,10 @@ handle_signals (void)
     }
 }
 
-/* The main loop. */
+
+/*
+ * The main loop.
+ */
 void
 listen_for_events (void)
 {

@@ -41,6 +41,7 @@ hook_add (struct list_head *hook, struct sbuf *s)
   list_add_tail (&s->node, hook);
 }
 
+
 void
 hook_remove (struct list_head *hook, struct sbuf *s)
 {
@@ -57,6 +58,7 @@ hook_remove (struct list_head *hook, struct sbuf *s)
         }
     }
 }
+
 
 void
 hook_run (struct list_head *hook)
@@ -75,6 +77,7 @@ hook_run (struct list_head *hook)
         }
     }
 }
+
 
 struct list_head *
 hook_lookup (char *s)

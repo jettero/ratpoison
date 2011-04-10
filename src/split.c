@@ -29,6 +29,7 @@
 #define VERTICALLY 0
 #define HORIZONTALLY 1
 
+
 static void
 update_last_access (rp_frame *frame)
 {
@@ -38,12 +39,14 @@ update_last_access (rp_frame *frame)
   counter++;
 }
 
+
 rp_frame *
 current_frame (void)
 {
   rp_screen *s = current_screen();
   return screen_get_frame (s, s->current_frame);
 }
+
 
 int
 num_frames (rp_screen *s)
@@ -58,6 +61,7 @@ num_frames (rp_screen *s)
 
  return count;
 }
+
 
 void
 cleanup_frame (rp_frame *frame)
@@ -84,6 +88,7 @@ cleanup_frame (rp_frame *frame)
     hide_others (win);
 }
 
+
 rp_window *
 set_frames_window (rp_frame *frame, rp_window *win)
 {
@@ -108,6 +113,7 @@ set_frames_window (rp_frame *frame, rp_window *win)
   return find_window_number (last_win);
 }
 
+
 rp_screen *
 frames_screen (rp_frame *frame)
 {
@@ -126,6 +132,7 @@ frames_screen (rp_frame *frame)
   return NULL;
 }
 
+
 void
 maximize_all_windows_in_frame (rp_frame *frame)
 {
@@ -140,7 +147,10 @@ maximize_all_windows_in_frame (rp_frame *frame)
     }
 }
 
-/* Make the frame occupy the entire screen */
+
+/*
+ * Make the frame occupy the entire screen.
+ */
 static void
 maximize_frame (rp_frame *frame)
 {
@@ -153,7 +163,10 @@ maximize_frame (rp_frame *frame)
   frame->height = screen_height (s);
 }
 
-/* Create a full screen frame */
+
+/*
+ * Create a full screen frame.
+ */
 static void
 create_initial_frame (rp_screen *screen)
 {
@@ -169,6 +182,7 @@ create_initial_frame (rp_screen *screen)
   set_frames_window (frame, NULL);
 }
 
+
 void
 init_frame_lists (void)
 {
@@ -178,6 +192,7 @@ init_frame_lists (void)
     init_frame_list (&screens[i]);
 }
 
+
 void
 init_frame_list (rp_screen *screen)
 {
@@ -185,6 +200,7 @@ init_frame_list (rp_screen *screen)
 
   create_initial_frame(screen);
 }
+
 
 rp_frame *
 find_last_frame (void)
@@ -211,7 +227,10 @@ find_last_frame (void)
   return last;
 }
 
-/* Return the frame that contains the window. */
+
+/* 
+ * Return the frame that contains the window. 
+ */
 rp_frame *
 find_windows_frame (rp_window *win)
 {
@@ -228,12 +247,14 @@ find_windows_frame (rp_window *win)
   return NULL;
 }
 
+
 rp_frame *
 find_frame_next (rp_frame *frame)
 {
   if (frame == NULL) return NULL;
   return list_next_entry (frame, &frames_screen (frame)->frames, node);
 }
+
 
 rp_frame *
 find_frame_prev (rp_frame *frame)
@@ -247,6 +268,7 @@ current_window (void)
 {
   return find_window_number (current_frame()->win_number);
 }
+
 
 static int
 window_fits_in_frame (rp_window *win, rp_frame *frame)
@@ -266,8 +288,11 @@ window_fits_in_frame (rp_window *win, rp_frame *frame)
   return 1;
 }
 
-/* Search the list of mapped windows for a window that will fit in the
-   specified frame. */
+
+/* 
+ * Search the list of mapped windows for a window that will fit in the specified
+ * frame. 
+ */
 rp_window *
 find_window_for_frame (rp_frame *frame)
 {
@@ -296,8 +321,11 @@ find_window_for_frame (rp_frame *frame)
   return NULL;
 }
 
-/* Splits the frame in 2. if way is 0 then split vertically otherwise
-   split it horizontally. */
+
+/* 
+ * Splits the frame in 2. if way is 0 then split vertically otherwise split it
+ * horizontally. 
+ */
 static void
 split_frame (rp_frame *frame, int way, int pixels)
 {
@@ -363,21 +391,26 @@ split_frame (rp_frame *frame, int way, int pixels)
   show_frame_indicator(0);
 }
 
-/* Splits the window vertically leaving the original with 'pixels'
-   pixels . */
+
+/* 
+ * Splits the window vertically leaving the original with 'pixels' pixels. 
+ */
 void
 v_split_frame (rp_frame *frame, int pixels)
 {
   split_frame (frame, VERTICALLY, pixels);
 }
 
-/* Splits the frame horizontally leaving the original with 'pixels'
-   pixels . */
+
+/* 
+ * Splits the frame horizontally leaving the original with 'pixels' pixels. 
+ */
 void
 h_split_frame (rp_frame *frame, int pixels)
 {
   split_frame (frame, HORIZONTALLY, pixels);
 }
+
 
 void
 remove_all_splits (void)
@@ -409,7 +442,10 @@ remove_all_splits (void)
   maximize_all_windows_in_frame (current_frame());
 }
 
-/* Shrink the size of the frame to fit it's current window. */
+
+/*
+ * Shrink the size of the frame to fit it's current window.
+ */
 void
 resize_shrink_to_window (rp_frame *frame)
 {
@@ -423,10 +459,12 @@ resize_shrink_to_window (rp_frame *frame)
   resize_frame_vertically (frame, win->height + win->border*2 - frame->height);
 }
 
-/* resize_frame is a generic frame resizer that can resize vertically,
-   horizontally, to the right, to the left, etc. It all depends on the
-   functions passed to it. Returns -1 if the resize failed, 0 for
-   success. */
+
+/* 
+ * resize_frame is a generic frame resizer that can resize vertically,
+ * horizontally, to the right, to the left, etc. It all depends on the functions
+ * passed to it. Returns -1 if the resize failed, 0 for success.
+ */
 static int
 resize_frame (rp_frame *frame, rp_frame *pusher, int diff,
               int (*c1)(rp_frame *), int (c2)(rp_frame *),
@@ -498,7 +536,10 @@ static int resize_frame_top (rp_frame *frame, rp_frame *pusher, int diff);
 static int resize_frame_left (rp_frame *frame, rp_frame *pusher, int diff);
 static int resize_frame_right (rp_frame *frame, rp_frame *pusher, int diff);
 
-/* Resize frame by moving it's right side. */
+
+/*
+ * Resize frame by moving it's right side.
+ */
 static int
 resize_frame_right (rp_frame *frame, rp_frame *pusher, int diff)
 {
@@ -507,7 +548,10 @@ resize_frame_right (rp_frame *frame, rp_frame *pusher, int diff)
                        frame_resize_right, frame_resize_left, resize_frame_left);
 }
 
-/* Resize frame by moving it's left side. */
+
+/* 
+ * Resize frame by moving it's left side. 
+ */
 static int
 resize_frame_left (rp_frame *frame, rp_frame *pusher, int diff)
 {
@@ -516,7 +560,10 @@ resize_frame_left (rp_frame *frame, rp_frame *pusher, int diff)
                        frame_resize_left, frame_resize_right, resize_frame_right);
 }
 
-/* Resize frame by moving it's top side. */
+
+/* 
+ * Resize frame by moving it's top side.
+ */
 static int
 resize_frame_top (rp_frame *frame, rp_frame *pusher, int diff)
 {
@@ -525,7 +572,10 @@ resize_frame_top (rp_frame *frame, rp_frame *pusher, int diff)
                        frame_resize_up, frame_resize_down, resize_frame_bottom);
 }
 
-/* Resize frame by moving it's bottom side. */
+
+/* 
+ * Resize frame by moving it's bottom side.
+ */
 static int
 resize_frame_bottom (rp_frame *frame, rp_frame *pusher, int diff)
 {
@@ -534,8 +584,11 @@ resize_frame_bottom (rp_frame *frame, rp_frame *pusher, int diff)
                        frame_resize_down, frame_resize_up, resize_frame_top);
 }
 
-/* Resize frame diff pixels by expanding it to the right. If the frame
-   is against the right side of the screen, expand it to the left. */
+
+/* 
+ * Resize frame diff pixels by expanding it to the right. If the frame is
+ * against the right side of the screen, expand it to the left. 
+ */
 void
 resize_frame_horizontally (rp_frame *frame, int diff)
 {
@@ -580,8 +633,11 @@ resize_frame_horizontally (rp_frame *frame, int diff)
   free (l);
 }
 
-/* Resize frame diff pixels by expanding it down. If the frame is
-   against the bottom of the screen, expand it up. */
+
+/* 
+ * Resize frame diff pixels by expanding it down. If the frame is against the
+ * bottom of the screen, expand it up. 
+ */
 void
 resize_frame_vertically (rp_frame *frame, int diff)
 {
@@ -626,12 +682,14 @@ resize_frame_vertically (rp_frame *frame, int diff)
   free (l);
 }
 
+
 static int
 frame_is_below (rp_frame *src, rp_frame *frame)
 {
   if (frame->y > src->y) return 1;
   return 0;
 }
+
 
 static int
 frame_is_above (rp_frame *src, rp_frame *frame)
@@ -640,6 +698,7 @@ frame_is_above (rp_frame *src, rp_frame *frame)
   return 0;
 }
 
+
 static int
 frame_is_left (rp_frame *src, rp_frame *frame)
 {
@@ -647,12 +706,14 @@ frame_is_left (rp_frame *src, rp_frame *frame)
   return 0;
 }
 
+
 static int
 frame_is_right (rp_frame *src, rp_frame *frame)
 {
   if (frame->x > src->x) return 1;
   return 0;
 }
+
 
 static int
 total_frame_area (rp_screen *s)
@@ -668,7 +729,10 @@ total_frame_area (rp_screen *s)
   return area;
 }
 
-/* Return 1 if frames f1 and f2 overlap */
+
+/* 
+ * Return 1 if frames f1 and f2 overlap.
+ */
 static int
 frames_overlap (rp_frame *f1, rp_frame *f2)
 {
@@ -682,7 +746,10 @@ frames_overlap (rp_frame *f1, rp_frame *f2)
   return 1;
 }
 
-/* Return 1 if w's frame overlaps any other window's frame */
+
+/*
+ * Return 1 if w's frame overlaps any other window's frame.
+ */
 static int
 frame_overlaps (rp_frame *frame)
 {
@@ -700,6 +767,7 @@ frame_overlaps (rp_frame *frame)
     }
   return 0;
 }
+
 
 void
 remove_frame (rp_frame *frame)
@@ -818,8 +886,10 @@ remove_frame (rp_frame *frame)
   frame_free (s, frame);
 }
 
-/* Switch the input focus to another frame, and therefore a different
-   window. */
+
+/* 
+ * Switch the input focus to another frame, and therefore a different window. 
+ */
 void
 set_active_frame (rp_frame *frame, int force_indicator)
 {
@@ -873,6 +943,7 @@ set_active_frame (rp_frame *frame, int force_indicator)
     hook_run (&rp_switch_screen_hook);
 }
 
+
 void
 exchange_with_frame (rp_frame *cur, rp_frame *frame)
 {
@@ -924,6 +995,7 @@ blank_frame (rp_frame *frame)
   set_window_focus (frames_screen(frame)->key_window);
 }
 
+
 void
 hide_frame_indicator (void)
 {
@@ -931,6 +1003,7 @@ hide_frame_indicator (void)
   for (i=0; i<num_screens; i++)
     XUnmapWindow (dpy, screens[i].frame_window);
 }
+
 
 void
 show_frame_indicator (int force)
@@ -942,6 +1015,7 @@ show_frame_indicator (int force)
       alarm (defaults.frame_indicator_timeout);
     }
 }
+
 
 void
 show_frame_message (char *msg)
@@ -998,6 +1072,7 @@ show_frame_message (char *msg)
   sbuf_free (msgbuf);
 }
 
+
 rp_frame *
 find_frame_up (rp_frame *frame)
 {
@@ -1015,6 +1090,7 @@ find_frame_up (rp_frame *frame)
 
   return NULL;
 }
+
 
 rp_frame *
 find_frame_down (rp_frame *frame)
@@ -1034,6 +1110,7 @@ find_frame_down (rp_frame *frame)
   return NULL;
 }
 
+
 rp_frame *
 find_frame_left (rp_frame *frame)
 {
@@ -1052,6 +1129,7 @@ find_frame_left (rp_frame *frame)
   return NULL;
 }
 
+
 rp_frame *
 find_frame_right (rp_frame *frame)
 {
@@ -1069,6 +1147,7 @@ find_frame_right (rp_frame *frame)
 
   return NULL;
 }
+
 
 rp_frame *
 find_frame_number (int num)

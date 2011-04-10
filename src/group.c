@@ -24,6 +24,7 @@
 
 static struct numset *group_numset;
 
+
 static void
 set_current_group_1 (rp_group *g)
 {
@@ -32,6 +33,7 @@ set_current_group_1 (rp_group *g)
   if (g)
     g->last_access = counter++;
 }
+
 
 void
 init_groups(void)
@@ -48,6 +50,7 @@ init_groups(void)
   list_add_tail (&g->node, &rp_groups);
 }
 
+
 void
 free_groups(void)
 {
@@ -59,6 +62,7 @@ free_groups(void)
       group_free (cur);
     }
 }
+
 
 rp_group *
 group_new (int number, char *name)
@@ -80,6 +84,7 @@ group_new (int number, char *name)
   return g;
 }
 
+
 void
 group_free (rp_group *g)
 {
@@ -89,6 +94,7 @@ group_free (rp_group *g)
   numset_release (group_numset, g->number);
   free (g);
 }
+
 
 rp_group *
 group_add_new_group (char *name)
@@ -101,6 +107,7 @@ group_add_new_group (char *name)
   return g;
 }
 
+
 void
 group_rename (rp_group *g, char *name)
 {
@@ -109,17 +116,20 @@ group_rename (rp_group *g, char *name)
   g->name = xstrdup (name);
 }
 
+
 rp_group *
 group_next_group (void)
 {
   return list_next_entry (rp_current_group, &rp_groups, node);
 }
 
+
 rp_group *
 group_prev_group (void)
 {
   return list_prev_entry (rp_current_group, &rp_groups, node);
 }
+
 
 rp_group *
 group_last_group (void)
@@ -137,6 +147,7 @@ group_last_group (void)
     }
   return most_recent;
 }
+
 
 rp_group *
 groups_find_group_by_name (char *s, int exact_match)
@@ -156,6 +167,7 @@ groups_find_group_by_name (char *s, int exact_match)
   return NULL;
 }
 
+
 rp_group *
 groups_find_group_by_number (int n)
 {
@@ -170,7 +182,10 @@ groups_find_group_by_number (int n)
   return NULL;
 }
 
-/* Return the first group that contains the window. */
+
+/*
+ * Return the first group that contains the window.
+ */
 rp_group *
 groups_find_group_by_window (rp_window *win)
 {
@@ -188,7 +203,9 @@ groups_find_group_by_window (rp_window *win)
 }
 
 
-/* Return the first group that is g. */
+/*
+ * Return the first group that is g.
+ */
 rp_group *
 groups_find_group_by_group (rp_group *g)
 {
@@ -203,6 +220,7 @@ groups_find_group_by_group (rp_group *g)
   return NULL;
 }
 
+
 rp_window_elem *
 group_find_window (struct list_head *list, rp_window *win)
 {
@@ -216,6 +234,7 @@ group_find_window (struct list_head *list, rp_window *win)
 
   return NULL;
 }
+
 
 rp_window_elem *
 group_find_window_by_number (rp_group *g, int num)
@@ -233,8 +252,10 @@ group_find_window_by_number (rp_group *g, int num)
 }
 
 
-/* Insert a window_elem into the correct spot in the group's window
-   list to preserve window number ordering. */
+/* 
+ * Insert a window_elem into the correct spot in the group's window list to
+ * preserve window number ordering. 
+ */
 static void
 group_insert_window (struct list_head *h, rp_window_elem *w)
 {
@@ -252,6 +273,7 @@ group_insert_window (struct list_head *h, rp_window_elem *w)
   list_add_tail(&w->node, h);
 }
 
+
 static int
 group_in_list (struct list_head *h, rp_window_elem *w)
 {
@@ -266,8 +288,10 @@ group_in_list (struct list_head *h, rp_window_elem *w)
   return 0;
 }
 
-/* If a window_elem's number has changed then the list has to be
-   resorted. */
+
+/*
+ * If a window_elem's number has changed then the list has to be resorted.
+ */
 void
 group_resort_window (rp_group *g, rp_window_elem *w)
 {
@@ -282,6 +306,7 @@ group_resort_window (rp_group *g, rp_window_elem *w)
   group_insert_window (&g->mapped_windows, w);
 }
 
+
 void
 group_add_window (rp_group *g, rp_window *w)
 {
@@ -295,6 +320,7 @@ group_add_window (rp_group *g, rp_window *w)
   /* Finally, add it to our list. */
   list_add_tail (&we->node, &g->unmapped_windows);
 }
+
 
 void
 group_map_window (rp_group *g, rp_window *win)
@@ -311,6 +337,7 @@ group_map_window (rp_group *g, rp_window *win)
     }
 }
 
+
 void
 groups_map_window (rp_window *win)
 {
@@ -321,6 +348,7 @@ groups_map_window (rp_window *win)
       group_map_window (cur, win);
     }
 }
+
 
 void
 group_unmap_window (rp_group *g, rp_window *win)
@@ -336,6 +364,7 @@ group_unmap_window (rp_group *g, rp_window *win)
     }
 }
 
+
 void
 groups_unmap_window (rp_window *win)
 {
@@ -346,6 +375,7 @@ groups_unmap_window (rp_window *win)
       group_unmap_window (cur, win);
     }
 }
+
 
 void
 group_del_window (rp_group *g, rp_window *win)
@@ -374,7 +404,10 @@ group_del_window (rp_group *g, rp_window *win)
 #endif
 }
 
-/* Remove the window from any groups in resides in. */
+
+/*
+ * Remove the window from any groups in resides in. 
+ */
 void
 groups_del_window (rp_window *win)
 {
@@ -385,6 +418,7 @@ groups_del_window (rp_window *win)
       group_del_window (cur, win);
     }
 }
+
 
 rp_window *
 group_last_window (rp_group *g, rp_screen *s)
@@ -410,6 +444,7 @@ group_last_window (rp_group *g, rp_screen *s)
 
   return NULL;
 }
+
 
 rp_window *
 group_next_window (rp_group *g, rp_window *win)
@@ -441,6 +476,7 @@ group_next_window (rp_group *g, rp_window *win)
   return NULL;
 }
 
+
 rp_window *
 group_prev_window (rp_group *g, rp_window *win)
 {
@@ -471,6 +507,7 @@ group_prev_window (rp_group *g, rp_window *win)
   return NULL;
 
 }
+
 
 void
 group_move_window (rp_group *to, rp_window *win)
@@ -506,6 +543,7 @@ group_move_window (rp_group *to, rp_window *win)
   group_insert_window (&to->mapped_windows, we);
 }
 
+
 void
 groups_merge (rp_group *from, rp_group *to)
 {
@@ -534,6 +572,7 @@ groups_merge (rp_group *from, rp_group *to)
     }
 }
 
+
 void
 set_current_group (rp_group *g)
 {
@@ -545,6 +584,7 @@ set_current_group (rp_group *g)
   /* Call the switch group hook. */
   hook_run (&rp_switch_group_hook);
 }
+
 
 int
 group_delete_group (rp_group *g)
@@ -573,7 +613,10 @@ group_delete_group (rp_group *g)
     }
 }
 
-/* Used by :cother / :iother  */
+
+/* 
+ * Used by :cother / :iother
+ */
 rp_window *
 group_last_window_by_class (rp_group *g, char *class)
 {
@@ -601,7 +644,10 @@ group_last_window_by_class (rp_group *g, char *class)
   return NULL;
 }
 
-/* Used by :cother / :iother  */
+
+/*
+ * Used by :cother / :iother
+ */
 rp_window *
 group_last_window_by_class_complement (rp_group *g, char *class)
 {

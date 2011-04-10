@@ -45,17 +45,19 @@
 #endif
 
 /* Command line options */
-static struct option ratpoison_longopts[] =
-  { {"help",        no_argument,       0, 'h'},
-    {"interactive", no_argument,       0, 'i'},
-    {"version",     no_argument,       0, 'v'},
-    {"command",     required_argument, 0, 'c'},
-    {"display",     required_argument, 0, 'd'},
-    {"screen",      required_argument, 0, 's'},
-    {"file",        required_argument, 0, 'f'},
-    {0,             0,                 0, 0  } };
-
+static struct option ratpoison_longopts[] = {
+  {"help",        no_argument,       0, 'h'},
+  {"interactive", no_argument,       0, 'i'},
+  {"version",     no_argument,       0, 'v'},
+  {"command",     required_argument, 0, 'c'},
+  {"display",     required_argument, 0, 'd'},
+  {"screen",      required_argument, 0, 's'},
+  {"file",        required_argument, 0, 'f'},
+  {0,             0,                 0, 0  } 
+};
+ 
 static char ratpoison_opts[] = "hvic:d:s:f:";
+
 
 void
 fatal (const char *msg)
@@ -63,6 +65,7 @@ fatal (const char *msg)
   fprintf (stderr, "ratpoison: %s", msg);
   abort ();
 }
+
 
 void *
 xmalloc (size_t size)
@@ -73,6 +76,7 @@ xmalloc (size_t size)
   return value;
 }
 
+
 void *
 xrealloc (void *ptr, size_t size)
 {
@@ -81,6 +85,7 @@ xrealloc (void *ptr, size_t size)
     fatal ("Virtual memory exhausted");
   return value;
 }
+
 
 char *
 xstrdup (const char *s)
@@ -92,7 +97,10 @@ xstrdup (const char *s)
   return value;
 }
 
-/* Return a new string based on fmt. */
+
+/*
+ * Return a new string based on fmt.
+ */
 char *
 xvsprintf (char *fmt, va_list ap)
 {
@@ -146,7 +154,10 @@ xvsprintf (char *fmt, va_list ap)
   return xstrdup("<FAILURE>");
 }
 
-/* Return a new string based on fmt. */
+
+/*
+ * Return a new string based on fmt.
+ */
 char *
 xsprintf (char *fmt, ...)
 {
@@ -160,7 +171,10 @@ xsprintf (char *fmt, ...)
   return buffer;
 }
 
-/* strtok but do it for whitespace and be locale compliant. */
+
+/* 
+ * strtok but do it for whitespace and be locale compliant.
+ */
 char *
 strtok_ws (char *s)
 {
@@ -189,7 +203,10 @@ strtok_ws (char *s)
   return nonws;
 }
 
-/* A case insensitive strncmp. */
+
+/*
+ * A case insensitive strncmp.
+ */
 int
 str_comp (char *s1, char *s2, int len)
 {
@@ -201,11 +218,13 @@ str_comp (char *s1, char *s2, int len)
   return 1;
 }
 
+
 static void
 sighandler (int signum UNUSED)
 {
   kill_signalled++;
 }
+
 
 static void
 hup_handler (int signum UNUSED)
@@ -213,14 +232,18 @@ hup_handler (int signum UNUSED)
   hup_signalled++;
 }
 
+
 static void
 alrm_handler (int signum UNUSED)
 {
   alarm_signalled++;
 }
 
-/* Check for child processes that have quit but haven't been
-   acknowledged yet. Update their structure. */
+
+/* 
+ * Check for child processes that have quit but haven't been acknowledged yet.
+ * Update their structure. 
+ */
 void
 check_child_procs (void)
 {
@@ -249,6 +272,7 @@ check_child_procs (void)
     }
 }
 
+
 void
 chld_handler (int signum UNUSED)
 {
@@ -258,6 +282,7 @@ chld_handler (int signum UNUSED)
   check_child_procs();
   errno = serrno;
 }
+
 
 static int
 handler (Display *d, XErrorEvent *e)
@@ -287,6 +312,7 @@ handler (Display *d, XErrorEvent *e)
 
   return 0;
 }
+
 
 void
 set_sig_handler (int sig, void (*action)(int))
@@ -318,6 +344,7 @@ set_sig_handler (int sig, void (*action)(int))
     }
 }
 
+
 static void
 print_version (void)
 {
@@ -326,6 +353,7 @@ print_version (void)
 
   exit (EXIT_SUCCESS);
 }
+
 
 static void
 print_help (void)
@@ -344,6 +372,7 @@ print_help (void)
   exit (EXIT_SUCCESS);
 }
 
+
 void
 set_close_on_exec (FILE *fd)
 {
@@ -352,6 +381,7 @@ set_close_on_exec (FILE *fd)
   if (flags >= 0)
     fcntl (fnum, F_SETFD, flags | FD_CLOEXEC);
 }
+
 
 void
 read_rc_file (FILE *file)
@@ -408,6 +438,7 @@ read_rc_file (FILE *file)
   free (partial);
 }
 
+
 static void
 read_startup_files (char *alt_rcfile)
 {
@@ -460,8 +491,11 @@ read_startup_files (char *alt_rcfile)
     }
 }
 
-/* Odd that we spend so much code on making sure the silly welcome
-   message is correct. Oh well... */
+
+/*
+ * Odd that we spend so much code on making sure the silly welcome message is
+ * correct. Oh well... 
+ */
 static void
 show_welcome_message (void)
 {
@@ -499,6 +533,7 @@ show_welcome_message (void)
 
   free (prefix);
 }
+
 
 static void
 init_defaults (void)
@@ -552,6 +587,7 @@ init_defaults (void)
   defaults.frame_selectors = xstrdup ("");
   defaults.maxundos = 20;
 }
+
 
 int
 main (int argc, char *argv[])
@@ -735,6 +771,7 @@ main (int argc, char *argv[])
   return EXIT_SUCCESS;
 }
 
+
 static void
 free_screen (rp_screen *s)
 {
@@ -773,6 +810,7 @@ free_screen (rp_screen *s)
 
   free (s->display_string);
 }
+
 
 void
 clean_up (void)
@@ -814,6 +852,7 @@ clean_up (void)
   XCloseDisplay (dpy);
 }
 
+
 void
 set_extents_of_fontset (XFontSet font)
 {
@@ -823,6 +862,7 @@ set_extents_of_fontset (XFontSet font)
   rp_font_descent = extent->max_logical_extent.height / 5;
   rp_font_width = extent->max_logical_extent.width;
 }
+
 
 XFontSet load_query_font_set (Display *disp, const char *fontset_name)
 {

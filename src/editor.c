@@ -55,13 +55,11 @@ static edit_status editor_complete_next (rp_input_line *line);
 /* default edit action */
 static edit_status editor_insert (rp_input_line *line, char *keysym_buf);
 
-
 static char *saved_command = NULL;
 
 typedef struct edit_binding edit_binding;
 
-struct edit_binding
-{
+struct edit_binding {
   struct rp_key key;
   edit_status (*func)(rp_input_line *);
 };
@@ -99,6 +97,7 @@ static edit_binding edit_bindings[] =
      {{XK_ISO_Left_Tab, 0},             editor_complete_prev},
      { {0,              0},     0} };
 
+
 rp_input_line *
 input_line_new (char *prompt, char *preinput, int history_id, completion_fn fn)
 {
@@ -120,6 +119,7 @@ input_line_new (char *prompt, char *preinput, int history_id, completion_fn fn)
   return line;
 }
 
+
 void
 input_line_free (rp_input_line *line)
 {
@@ -127,6 +127,7 @@ input_line_free (rp_input_line *line)
   free (line->buffer);
   free (line);
 }
+
 
 edit_status
 execute_edit_action (rp_input_line *line, KeySym ch, unsigned int modifier, char *keysym_buf)
@@ -154,6 +155,7 @@ execute_edit_action (rp_input_line *line, KeySym ch, unsigned int modifier, char
   return status;
 }
 
+
 static edit_status
 editor_forward_char (rp_input_line *line)
 {
@@ -167,6 +169,7 @@ editor_forward_char (rp_input_line *line)
 
 }
 
+
 static edit_status
 editor_backward_char (rp_input_line *line)
 {
@@ -178,6 +181,7 @@ editor_backward_char (rp_input_line *line)
   else
     return EDIT_NO_OP;
 }
+
 
 static edit_status
 editor_forward_word (rp_input_line *line)
@@ -191,6 +195,7 @@ editor_forward_word (rp_input_line *line)
   return EDIT_MOVE;
 }
 
+
 static edit_status
 editor_backward_word (rp_input_line *line)
 {
@@ -203,6 +208,7 @@ editor_backward_word (rp_input_line *line)
   return EDIT_MOVE;
 }
 
+
 static edit_status
 editor_beginning_of_line (rp_input_line *line)
 {
@@ -212,6 +218,7 @@ editor_beginning_of_line (rp_input_line *line)
   return EDIT_MOVE;
 }
 
+
 static edit_status
 editor_end_of_line (rp_input_line *line)
 {
@@ -220,6 +227,7 @@ editor_end_of_line (rp_input_line *line)
 
   return EDIT_MOVE;
 }
+
 
 static edit_status
 editor_delete_char (rp_input_line *line)
@@ -238,6 +246,7 @@ editor_delete_char (rp_input_line *line)
     return EDIT_NO_OP;
 }
 
+
 static edit_status
 editor_backward_delete_char (rp_input_line *line)
 {
@@ -255,6 +264,7 @@ editor_backward_delete_char (rp_input_line *line)
   else
     return EDIT_NO_OP;
 }
+
 
 static edit_status
 editor_kill_word (rp_input_line *line)
@@ -280,6 +290,7 @@ editor_kill_word (rp_input_line *line)
 
   return EDIT_DELETE;
 }
+
 
 static edit_status
 editor_backward_kill_word (rp_input_line *line)
@@ -307,6 +318,7 @@ editor_backward_kill_word (rp_input_line *line)
   return EDIT_DELETE;
 }
 
+
 static edit_status
 editor_kill_line (rp_input_line *line)
 {
@@ -322,7 +334,10 @@ editor_kill_line (rp_input_line *line)
   return EDIT_DELETE;
 }
 
-/* Do the dirty work of killing a line backwards. */
+
+/* 
+ * Do the dirty work of killing a line backwards.
+ */
 static void
 backward_kill_line (rp_input_line *line)
 {
@@ -339,6 +354,7 @@ backward_kill_line (rp_input_line *line)
   line->position = 0;
 }
 
+
 static edit_status
 editor_backward_kill_line (rp_input_line *line)
 {
@@ -352,6 +368,7 @@ editor_backward_kill_line (rp_input_line *line)
 
   return EDIT_DELETE;
 }
+
 
 static edit_status
 editor_history_previous (rp_input_line *line)
@@ -382,6 +399,7 @@ editor_history_previous (rp_input_line *line)
 
   return EDIT_INSERT;
 }
+
 
 static edit_status
 editor_history_next (rp_input_line *line)
@@ -414,17 +432,20 @@ editor_history_next (rp_input_line *line)
   return EDIT_INSERT;
 }
 
+
 static edit_status
 editor_abort (rp_input_line *line UNUSED)
 {
   return EDIT_ABORT;
 }
 
+
 static edit_status
 editor_no_action (rp_input_line *line UNUSED)
 {
   return EDIT_NO_OP;
 }
+
 
 static edit_status
 editor_insert (rp_input_line *line, char *keysym_buf)
@@ -449,6 +470,7 @@ editor_insert (rp_input_line *line, char *keysym_buf)
 
   return EDIT_INSERT;
 }
+
 
 static edit_status
 editor_enter (rp_input_line *line)
@@ -484,6 +506,7 @@ editor_enter (rp_input_line *line)
   return EDIT_DONE;
 }
 
+
 static edit_status
 editor_paste_selection (rp_input_line *line)
 {
@@ -498,6 +521,7 @@ editor_paste_selection (rp_input_line *line)
   else
     return EDIT_NO_OP;
 }
+
 
 static edit_status
 editor_complete (rp_input_line *line, int direction)
@@ -526,11 +550,13 @@ editor_complete (rp_input_line *line, int direction)
   return EDIT_COMPLETE;
 }
 
+
 static edit_status
 editor_complete_next (rp_input_line *line)
 {
   return editor_complete (line, COMPLETION_NEXT);
 }
+
 
 static edit_status
 editor_complete_prev (rp_input_line *line)

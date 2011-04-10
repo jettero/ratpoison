@@ -53,6 +53,7 @@ clear_unmanaged_list (void)
   num_unmanaged_windows = 0;
 }
 
+
 char *
 list_unmanaged_windows (void)
 {
@@ -79,6 +80,7 @@ list_unmanaged_windows (void)
     }
   return tmp;
 }
+
 
 void
 add_unmanaged_window (char *name)
@@ -128,11 +130,13 @@ grab_top_level_keys (Window w)
 #endif
 }
 
+
 void
 ungrab_top_level_keys (Window w)
 {
   XUngrabKey(dpy, AnyKey, AnyModifier, w);
 }
+
 
 void
 ungrab_keys_all_wins (void)
@@ -146,6 +150,7 @@ ungrab_keys_all_wins (void)
     }
 }
 
+
 void
 grab_keys_all_wins (void)
 {
@@ -157,6 +162,7 @@ grab_keys_all_wins (void)
       grab_top_level_keys (cur->w);
     }
 }
+
 
 rp_screen*
 current_screen (void)
@@ -172,6 +178,7 @@ current_screen (void)
   /* This should never happen. */
   return &screens[0];
 }
+
 
 void
 update_normal_hints (rp_window *win)
@@ -221,6 +228,7 @@ get_wmname (Window w)
   return name;
 }
 
+
 static XClassHint *
 get_class_hints (Window w)
 {
@@ -239,8 +247,11 @@ get_class_hints (Window w)
   return class;
 }
 
-/* Reget the WM_NAME property for the window and update its
-   name. Return 1 if the name changed. */
+
+/* 
+ * Reget the WM_NAME property for the window and update its name. Return 1 if
+ * the name changed. 
+ */
 int
 update_window_name (rp_window *win)
 {
@@ -280,7 +291,10 @@ update_window_name (rp_window *win)
   return changed;
 }
 
-/* Send an artificial configure event to the window. */
+
+/* 
+ * Send an artificial configure event to the window. 
+ */
 void
 send_configure (Window w, int x, int y, int width, int height, int border)
 {
@@ -300,8 +314,11 @@ send_configure (Window w, int x, int y, int width, int height, int border)
   XSendEvent (dpy, w, False, StructureNotifyMask, (XEvent*)&ce);
 }
 
-/* This function is used to determine if the window should be treated
-   as a transient. */
+
+/* 
+ * This function is used to determine if the window should be treated as a
+ * transient. 
+ */
 int
 window_is_transient (rp_window *win)
 {
@@ -316,6 +333,7 @@ window_is_transient (rp_window *win)
 #endif
     ;
 }
+
 
 static Atom
 get_net_wm_window_type (rp_window *win)
@@ -371,6 +389,7 @@ update_window_information (rp_window *win)
   update_window_gravity (win);
 }
 
+
 void
 unmanage (rp_window *w)
 {
@@ -396,7 +415,10 @@ unmanage (rp_window *w)
 #endif
 }
 
-/* When starting up scan existing windows and start managing them. */
+
+/* 
+ * When starting up scan existing windows and start managing them. 
+ */
 void
 scanwins(rp_screen *s)
 {
@@ -450,6 +472,7 @@ scanwins(rp_screen *s)
   XFree(wins);
 }
 
+
 int
 unmanaged_window (Window w)
 {
@@ -472,7 +495,10 @@ unmanaged_window (Window w)
   return 0;
 }
 
-/* Set the state of the window. */
+
+/*
+ * Set the state of the window.
+ */
 void
 set_state (rp_window *win, int state)
 {
@@ -487,7 +513,10 @@ set_state (rp_window *win, int state)
                    PropModeReplace, (unsigned char *)data, 2);
 }
 
-/* Get the WM state of the window. */
+
+/*
+ * Get the WM state of the window.
+ */
 long
 get_state (rp_window *win)
 {
@@ -512,6 +541,7 @@ get_state (rp_window *win)
 
   return state;
 }
+
 
 static void
 move_window (rp_window *win)
@@ -564,8 +594,10 @@ move_window (rp_window *win)
     }
 }
 
-/* Set a transient window's x,y,width,height fields to maximize the
-   window. */
+
+/* 
+ * Set a transient window's x,y,width,height fields to maximize the window.
+ */
 static void
 maximize_transient (rp_window *win)
 {
@@ -629,8 +661,10 @@ maximize_transient (rp_window *win)
   win->height = maxy;
 }
 
-/* set a good standard window's x,y,width,height fields to maximize
-   the window. */
+
+/* 
+ * Set a good standard window's x,y,width,height fields to maximize the window.
+ */
 static void
 maximize_normal (rp_window *win)
 {
@@ -719,8 +753,11 @@ maximize_normal (rp_window *win)
   win->height = maxy;
 }
 
-/* Maximize the current window if data = 0, otherwise assume it is a
-   pointer to a window that should be maximized */
+
+/* 
+ * Maximize the current window if data = 0, otherwise assume it is a pointer to
+ * a window that should be maximized.
+ */
 void
 maximize (rp_window *win)
 {
@@ -747,8 +784,10 @@ maximize (rp_window *win)
   XSync (dpy, False);
 }
 
-/* Maximize the current window but don't treat transient windows
-   differently. */
+
+/* 
+ * Maximize the current window but don't treat transient windows differently. 
+ */
 void
 force_maximize (rp_window *win)
 {
@@ -784,7 +823,10 @@ force_maximize (rp_window *win)
   XSync (dpy, False);
 }
 
-/* map the unmapped window win */
+
+/*
+ * Map the unmapped window win.
+ */
 void
 map_window (rp_window *win)
 {
@@ -819,6 +861,7 @@ map_window (rp_window *win)
   hook_run (&rp_new_window_hook);
 }
 
+
 void
 hide_window (rp_window *win)
 {
@@ -837,6 +880,7 @@ hide_window (rp_window *win)
   set_state (win, IconicState);
 }
 
+
 void
 unhide_window (rp_window *win)
 {
@@ -851,6 +895,7 @@ unhide_window (rp_window *win)
   set_state (win, NormalState);
 }
 
+
 void
 unhide_all_windows (void)
 {
@@ -861,8 +906,11 @@ unhide_all_windows (void)
     unhide_window (win);
 }
 
-/* same as unhide_window except that it makes sure the window is mapped
-   on the bottom of the window stack. */
+
+/* 
+ * Same as unhide_window except that it makes sure the window is mapped on the
+ * bottom of the window stack. 
+ */
 void
 unhide_window_below (rp_window *win)
 {
@@ -877,6 +925,7 @@ unhide_window_below (rp_window *win)
   XMapWindow (dpy, win->w);
   set_state (win, NormalState);
 }
+
 
 void
 withdraw_window (rp_window *win)
@@ -910,7 +959,10 @@ withdraw_window (rp_window *win)
   hook_run (&rp_delete_window_hook);
 }
 
-/* Hide all other mapped windows except for win in win's frame. */
+
+/*
+ * Hide all other mapped windows except for win in win's frame.
+ */
 void
 hide_others (rp_window *win)
 {

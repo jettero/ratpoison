@@ -23,11 +23,13 @@
 
 #include <string.h>
 
+
 int
 frame_left (rp_frame *frame)
 {
   return frame->x;
 }
+
 
 int
 frame_top (rp_frame *frame)
@@ -35,11 +37,13 @@ frame_top (rp_frame *frame)
   return frame->y;
 }
 
+
 int
 frame_right (rp_frame *frame)
 {
   return frame->x + frame->width;
 }
+
 
 int
 frame_bottom (rp_frame *frame)
@@ -47,17 +51,20 @@ frame_bottom (rp_frame *frame)
   return frame->y + frame->height;
 }
 
+
 int
 frame_width(rp_frame *frame)
 {
   return frame->width;
 }
 
+
 int
 frame_height(rp_frame *frame)
 {
   return frame->height;
 }
+
 
 void
 frame_resize_left (rp_frame *frame, int amount)
@@ -66,11 +73,13 @@ frame_resize_left (rp_frame *frame, int amount)
   frame->width += amount;
 }
 
+
 void
 frame_resize_right (rp_frame *frame, int amount)
 {
   frame->width += amount;
 }
+
 
 void
 frame_resize_up (rp_frame *frame, int amount)
@@ -79,11 +88,13 @@ frame_resize_up (rp_frame *frame, int amount)
   frame->height += amount;
 }
 
+
 void
 frame_resize_down (rp_frame *frame, int amount)
 {
   frame->height += amount;
 }
+
 
 void
 frame_move_left (rp_frame *frame, int amount)
@@ -91,11 +102,13 @@ frame_move_left (rp_frame *frame, int amount)
   frame->x -= amount;
 }
 
+
 void
 frame_move_right (rp_frame *frame, int amount)
 {
   frame->x += amount;
 }
+
 
 void
 frame_move_up (rp_frame *frame, int amount)
@@ -103,11 +116,13 @@ frame_move_up (rp_frame *frame, int amount)
   frame->y -= amount;
 }
 
+
 void
 frame_move_down (rp_frame *frame, int amount)
 {
   frame->y += amount;
 }
+
 
 static void
 init_frame (rp_frame *f)
@@ -122,6 +137,7 @@ init_frame (rp_frame *f)
   f->dedicated = 0;
 }
 
+
 rp_frame *
 frame_new (rp_screen *s)
 {
@@ -133,6 +149,7 @@ frame_new (rp_screen *s)
 
   return f;
 }
+
 
 void
 frame_free (rp_screen *s, rp_frame *f)
@@ -159,6 +176,7 @@ frame_copy (rp_frame *frame)
 
   return copy;
 }
+
 
 char *
 frame_dump (rp_frame *frame, rp_screen *screen)
@@ -188,6 +206,7 @@ frame_dump (rp_frame *frame, rp_screen *screen)
   free (s);
   return tmp;
 }
+
 
 /* Used only by frame_read */
 #define read_slot(x) do { tmp = strtok_ws (NULL); x = strtol(tmp,NULL,10); } while(0)

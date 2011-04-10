@@ -87,6 +87,7 @@ struct numset *rp_frame_numset;
 /* The X11 selection globals */
 rp_xselection selection;
 
+
 static void
 x_export_selection (void)
 {
@@ -97,6 +98,7 @@ x_export_selection (void)
   XChangeProperty(dpy, screens[0].root, XA_CUT_BUFFER0, XA_STRING, 8,
                   PropModeReplace, (unsigned char*)selection.text, selection.len);
 }
+
 
 void
 set_nselection (char *txt, int len)
@@ -117,6 +119,7 @@ set_nselection (char *txt, int len)
   x_export_selection();
 }
 
+
 void
 set_selection (char *txt)
 {
@@ -128,6 +131,7 @@ set_selection (char *txt)
 
   x_export_selection();
 }
+
 
 static char *
 get_cut_buffer (void)
@@ -150,7 +154,10 @@ get_cut_buffer (void)
     return NULL;
 }
 
-/* Lifted the code from rxvt. */
+
+/*
+ * Lifted the code from rxvt.
+ */
 static char *
 get_primary_selection(void)
 {
@@ -177,6 +184,7 @@ get_primary_selection(void)
   }
   return sbuf_free_struct (s);
 }
+
 
 char *
 get_selection (void)
@@ -222,7 +230,6 @@ get_selection (void)
 }
 
 /* The hook dictionary globals. */
-
 LIST_HEAD (rp_key_hook);
 LIST_HEAD (rp_switch_win_hook);
 LIST_HEAD (rp_switch_frame_hook);
@@ -234,18 +241,20 @@ LIST_HEAD (rp_delete_window_hook);
 LIST_HEAD (rp_new_window_hook);
 LIST_HEAD (rp_title_changed_hook);
 
-struct rp_hook_db_entry rp_hook_db[]=
-  {{"key",              &rp_key_hook},
-   {"switchwin",        &rp_switch_win_hook},
-   {"switchframe",      &rp_switch_frame_hook},
-   {"switchgroup",      &rp_switch_group_hook},
-   {"switchscreen",      &rp_switch_screen_hook},
-   {"deletewindow",     &rp_delete_window_hook},
-   {"quit",             &rp_quit_hook},
-   {"restart",          &rp_restart_hook},
-   {"newwindow",	&rp_new_window_hook},
-   {"titlechanged",	&rp_title_changed_hook},
-   {NULL, NULL}};
+struct rp_hook_db_entry rp_hook_db[]= {
+  {"key",          &rp_key_hook},
+  {"switchwin",    &rp_switch_win_hook},
+  {"switchframe",  &rp_switch_frame_hook},
+  {"switchgroup",  &rp_switch_group_hook},
+  {"switchscreen", &rp_switch_screen_hook},
+  {"deletewindow", &rp_delete_window_hook},
+  {"quit",         &rp_quit_hook},
+  {"restart",      &rp_restart_hook},
+  {"newwindow",	   &rp_new_window_hook},
+  {"titlechanged", &rp_title_changed_hook},
+  {NULL, NULL}
+};
+
 
 void
 set_rp_window_focus (rp_window *win)
@@ -254,6 +263,7 @@ set_rp_window_focus (rp_window *win)
   XSetInputFocus (dpy, win->w,
                   RevertToPointerRoot, CurrentTime);
 }
+
 
 void
 set_window_focus (Window window)
@@ -266,6 +276,7 @@ set_window_focus (Window window)
 LIST_HEAD (rp_frame_undos);
 LIST_HEAD (rp_frame_redos);
 
+
 void
 init_globals (void)
 {
@@ -273,8 +284,10 @@ init_globals (void)
   selection.len = 0;
 }
 
-/* Wrapper font functions to support Xft */
 
+/*
+ * Wrapper font functions to support Xft.
+ */
 void
 rp_draw_string (rp_screen *s, Drawable d, int style, int x, int y, char *string, int length)
 {
@@ -298,6 +311,7 @@ rp_draw_string (rp_screen *s, Drawable d, int style, int x, int y, char *string,
     XmbDrawString (dpy, d, defaults.font, style == STYLE_NORMAL ? s->normal_gc:s->inverse_gc, x, y, string, length);
 }
 
+
 int
 rp_text_width (rp_screen *s, XFontSet font, char *string, int count)
 {
@@ -313,4 +327,3 @@ rp_text_width (rp_screen *s, XFontSet font, char *string, int count)
   else
     return XmbTextEscapement (font, string, count);
 }
-

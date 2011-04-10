@@ -24,7 +24,9 @@
 
 #include "ratpoison.h"
 
-/* Initialize a numset structure. */
+/*
+ * Initialize a numset structure.
+ */
 static void
 numset_init (struct numset *ns)
 {
@@ -33,6 +35,7 @@ numset_init (struct numset *ns)
 
   ns->numbers_taken = xmalloc (ns->max_taken * sizeof (int));
 }
+
 
 static int
 numset_num_is_taken (struct numset *ns, int n)
@@ -46,7 +49,10 @@ numset_num_is_taken (struct numset *ns, int n)
   return 0;
 }
 
-/* returns index into numbers_taken that can be used. */
+
+/*
+ * Returns index into numbers_taken that can be used.
+ */
 static int
 numset_find_empty_cell (struct numset *ns)
 {
@@ -68,6 +74,7 @@ numset_find_empty_cell (struct numset *ns)
   return ns->num_taken-1;
 }
 
+
 int
 numset_add_num (struct numset *ns, int n)
 {
@@ -84,8 +91,11 @@ numset_add_num (struct numset *ns, int n)
   return 1; /* success! */
 }
 
-/* returns a unique number that can be used as the window number in
-   the program bar. */
+
+/* 
+ * Returns a unique number that can be used as the window number in the program
+ * bar.
+ */
 int
 numset_request (struct numset *ns)
 {
@@ -101,8 +111,11 @@ numset_request (struct numset *ns)
   return i;
 }
 
-/* When a window is destroyed, it gives back its window number with
-   this function. */
+
+/* 
+ * When a window is destroyed, it gives back its window number with this
+ * function.
+ */
 void
 numset_release (struct numset *ns, int n)
 {
@@ -123,7 +136,10 @@ numset_release (struct numset *ns, int n)
     }
 }
 
-/* Create a new numset and return a pointer to it. */
+
+/*
+ * Create a new numset and return a pointer to it.
+ */
 struct numset *
 numset_new (void)
 {
@@ -134,13 +150,17 @@ numset_new (void)
   return ns;
 }
 
-/* Free a numset structure and it's internal data. */
+
+/*
+ * Free a numset structure and it's internal data.
+ */
 void
 numset_free (struct numset *ns)
 {
   free (ns->numbers_taken);
   free (ns);
 }
+
 
 void
 numset_clear (struct numset *ns)

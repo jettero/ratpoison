@@ -29,9 +29,11 @@
 
 #include "ratpoison.h"
 
-/* Convert an X11 modifier mask to the rp modifier mask equivalent, as
-   best it can (the X server may not have a hyper key defined, for
-   instance). */
+
+/* 
+ * Convert an X11 modifier mask to the rp modifier mask equivalent, as best it
+ * can (the X server may not have a hyper key defined, for instance). 
+ */
 unsigned int
 x11_mask_to_rp_mask (unsigned int mask)
 {
@@ -51,9 +53,11 @@ x11_mask_to_rp_mask (unsigned int mask)
   return result;
 }
 
-/* Convert an rp modifier mask to the x11 modifier mask equivalent, as
-   best it can (the X server may not have a hyper key defined, for
-   instance). */
+
+/*
+ * Convert an rp modifier mask to the x11 modifier mask equivalent, as best it
+ * can (the X server may not have a hyper key defined, for instance).
+ */
 unsigned int
 rp_mask_to_x11_mask (unsigned int mask)
 {
@@ -73,49 +77,53 @@ rp_mask_to_x11_mask (unsigned int mask)
   return result;
 }
 
+#if 0
+ /* The caller is responsible for freeing the keycodes. */ 
+ KeyCode * 
+ keysym_to_keycodes (KeySym sym, int *n_returned) 
+ { 
+   int min_code, max_code; 
+   int syms_per_code; 
+   KeySym *syms; 
+   KeyCode *codes; 
+   int code, code_col; 
 
-/* /\* The caller is responsible for freeing the keycodes. *\/ */
-/* KeyCode * */
-/* keysym_to_keycodes (KeySym sym, int *n_returned) */
-/* { */
-/*   int min_code, max_code; */
-/*   int syms_per_code; */
-/*   KeySym *syms; */
-/*   KeyCode *codes; */
-/*   int code, code_col; */
+   XDisplayKeycodes (dpy, &min_code, &max_code); 
+   syms = XGetKeyboardMapping (dpy, 
+ 			      min_code, max_code - min_code + 1, 
+ 			      &syms_per_code); 
 
-/*   XDisplayKeycodes (dpy, &min_code, &max_code); */
-/*   syms = XGetKeyboardMapping (dpy, */
-/* 			      min_code, max_code - min_code + 1, */
-/* 			      &syms_per_code); */
+   *n_returned = 0; 
+   codes = (KeyCode *)xmalloc (sizeof(KeyCode) * n_returned); 
+   for (code = min_code; code < max_code; code++) 
+     for (code_col = 0; code_col < syms_per_code; code_col++) 
+       {       
+ 	int s = syms[((code - min_code) * syms_per_code) + code_col]; 
 
-/*   *n_returned = 0; */
-/*   codes = (KeyCode *)xmalloc (sizeof(KeyCode) * n_returned); */
-/*   for (code = min_code; code < max_code; code++) */
-/*     for (code_col = 0; code_col < syms_per_code; code_col++) */
-/*       {       */
-/* 	int s = syms[((code - min_code) * syms_per_code) + code_col]; */
+ 	if (sym == s) 
+ 	  { 
+ 	    n_returned++; 
+ 	    codes = (KeyCode *)xrealloc (sizeof(KeyCode) * n_returned); 
+ 	    codes[n_returned-1] = code; 
+ 	  } 
+       }	 
+    
+   XFree ((char *) syms); 
 
-/* 	if (sym == s) */
-/* 	  { */
-/* 	    n_returned++; */
-/* 	    codes = (KeyCode *)xrealloc (sizeof(KeyCode) * n_returned); */
-/* 	    codes[n_returned-1] = code; */
-/* 	  } */
-/*       }	 */
-      
-/*   XFree ((char *) syms); */
+   if (n_returned > 0) 
+     return codes; 
+   else  
+     { 
+       xfree (codes) 
+       return NULL; 
+     } 
+ } 
+#endif
 
-/*   if (n_returned > 0) */
-/*     return codes; */
-/*   else  */
-/*     { */
-/*       xfree (codes) */
-/*       return NULL; */
-/*     } */
-/* } */
 
-/* Figure out what keysyms are attached to what modifiers */
+/*
+ * Figure out what keysyms are attached to what modifiers.
+ */
 void
 update_modifier_map (void)
 {
@@ -241,9 +249,12 @@ update_modifier_map (void)
   XFreeModifiermap (mods);
 }
 
-/* we need a keycode + modifier to generate the proper keysym (such as
-   @). Return 1 if successful, 0 otherwise. This function can fail if a
-   keysym doesn't map to a keycode. */
+
+/*
+ * We need a keycode + modifier to generate the proper keysym (such as @).
+ * Return 1 if successful, 0 otherwise. This function can fail if a keysym
+ * doesn't map to a keycode.
+ */
 static int
 keysym_to_keycode_mod (KeySym keysym, KeyCode *code, unsigned int *mod)
 {
@@ -261,8 +272,11 @@ keysym_to_keycode_mod (KeySym keysym, KeyCode *code, unsigned int *mod)
   return *code != 0;
 }
 
-/* Grab the key while ignoring annoying modifier keys including
-   caps lock, num lock, and scroll lock. */
+
+/*
+ * Grab the key while ignoring annoying modifier keys including caps lock, num
+ * lock, and scroll lock.
+ */
 void
 grab_key (KeySym keysym, unsigned int modifiers, Window grab_window)
 {
@@ -298,7 +312,9 @@ grab_key (KeySym keysym, unsigned int modifiers, Window grab_window)
 }
 
 
-/* Return the name of the keysym. caller must free returned pointer */
+/*
+ * Return the name of the keysym. caller must free returned pointer.
+ */
 char *
 keysym_to_string (KeySym keysym, unsigned int modifier)
 {
@@ -330,13 +346,15 @@ keysym_to_string (KeySym keysym, unsigned int modifier)
   return tmp;
 }
 
-/* Cooks a keycode + modifier into a keysym + modifier. This should be
-   used anytime meaningful key information is to be extracted from a
-   KeyPress or KeyRelease event.
 
-   returns the number of bytes in keysym_name. If you are not
-   interested in the keysym name pass in NULL for keysym_name and 0
-   for len. */
+/* 
+ * Cooks a keycode + modifier into a keysym + modifier. This should be used
+ * anytime meaningful key information is to be extracted from a KeyPress or
+ * KeyRelease event.
+
+ * returns the number of bytes in keysym_name. If you are not interested in the
+ * keysym name pass in NULL for keysym_name and 0 for len. 
+ */
 int
 cook_keycode (XKeyEvent *ev, KeySym *keysym, unsigned int *mod, char *keysym_name, int len, int ignore_bad_mods)
 {
@@ -381,7 +399,10 @@ cook_keycode (XKeyEvent *ev, KeySym *keysym, unsigned int *mod, char *keysym_nam
   return nbytes;
 }
 
-/* Wait for a key and discard it. */
+
+/*
+ * Wait for a key and discard it. 
+ */
 void
 read_any_key ()
 {
@@ -392,7 +413,10 @@ read_any_key ()
   read_single_key (&c, &mod, buffer, sizeof (buffer));
 }
 
-/* The same as read_key, but handle focusing the key_window and reverting focus. */
+
+/* 
+ * The same as read_key, but handle focusing the key_window and reverting focus.
+ */
 int
 read_single_key (KeySym *keysym, unsigned int *modifiers, char *keysym_name, int len)
 {
@@ -407,6 +431,7 @@ read_single_key (KeySym *keysym, unsigned int *modifiers, char *keysym_name, int
 
   return nbytes;
 }
+
 
 int
 read_key (KeySym *keysym, unsigned int *modifiers, char *keysym_name, int len)
@@ -424,6 +449,7 @@ read_key (KeySym *keysym, unsigned int *modifiers, char *keysym_name, int len)
 
   return nbytes;
 }
+
 
 static void
 update_input_window (rp_screen *s, rp_input_line *line)
@@ -477,6 +503,7 @@ update_input_window (rp_screen *s, rp_input_line *line)
   XFreeGC (dpy, lgc);
 }
 
+
 void
 ring_bell (void)
 {
@@ -513,6 +540,7 @@ ring_bell (void)
   XBell (dpy, 0);
 #endif
 }
+
 
 char *
 get_input (char *prompt, int history_id, completion_fn fn)

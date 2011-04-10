@@ -48,6 +48,7 @@ get_history_filename (void)
   return filename;
 }
 
+
 static const char *
 extract_shell_part (const char *p)
 {
@@ -63,10 +64,12 @@ extract_shell_part (const char *p)
   return NULL;
 }
 
+
 struct history_item {
 	struct list_head node;
 	char line[];
 };
+
 
 static struct history {
 	struct list_head head, *current;
@@ -107,6 +110,7 @@ getline(char **lineptr, size_t *n, FILE *f)
   } while(1);
 }
 #endif
+
 
 static void
 history_add_upto (int history_id, const char *item, size_t max)
@@ -162,11 +166,13 @@ history_add_upto (int history_id, const char *item, size_t max)
   h->count++;
 }
 
+
 void
 history_add (int history_id, char *item)
 {
   history_add_upto (history_id, item, defaults.history_size);
 }
+
 
 void
 history_load (void)
@@ -213,6 +219,7 @@ history_load (void)
   free (filename);
 }
 
+
 void
 history_save (void)
 {
@@ -248,6 +255,7 @@ history_save (void)
   free (filename);
 }
 
+
 void
 history_reset (void)
 {
@@ -256,6 +264,7 @@ history_reset (void)
   for (id = hist_NONE ; id < hist_COUNT ; id++ )
     	histories[id].current = &histories[id].head;
 }
+
 
 void
 history_resize (int size)
@@ -275,6 +284,7 @@ history_resize (int size)
   }
 }
 
+
 const char *
 history_previous (int history_id)
 {
@@ -286,6 +296,7 @@ history_previous (int history_id)
   histories[history_id].current = histories[history_id].current->prev;
   return list_entry(histories[history_id].current, struct history_item, node)->line;
 }
+
 
 const char *
 history_next (int history_id)
@@ -300,6 +311,7 @@ history_next (int history_id)
     return NULL;
   return list_entry(histories[history_id].current, struct history_item, node)->line;
 }
+
 
 int history_expand_line (int history_id UNUSED, char *string, char **output)
 {

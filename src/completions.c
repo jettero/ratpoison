@@ -23,6 +23,7 @@
 #include "ratpoison.h"
 #include "completions.h"
 
+
 rp_completions *
 completions_new (completion_fn list_fn)
 {
@@ -38,6 +39,7 @@ completions_new (completion_fn list_fn)
 
   return c;
 }
+
 
 void
 completions_free (rp_completions *c)
@@ -58,6 +60,7 @@ completions_free (rp_completions *c)
 
   free (c);
 }
+
 
 static void
 completions_assign (rp_completions *c, struct list_head *new_list)
@@ -80,6 +83,7 @@ completions_assign (rp_completions *c, struct list_head *new_list)
   list_first (c->last_match, &c->completion_list, node);
 }
 
+
 static void
 completions_update (rp_completions *c, char *partial)
 {
@@ -97,6 +101,7 @@ completions_update (rp_completions *c, char *partial)
   /* Free the head structure for our list. */
   free (new_list);
 }
+
 
 static char *
 completions_prev_match (rp_completions *c)
@@ -121,6 +126,7 @@ completions_prev_match (rp_completions *c)
   return NULL;
 }
 
+
 static char *
 completions_next_match (rp_completions *c)
 {
@@ -144,7 +150,10 @@ completions_next_match (rp_completions *c)
   return NULL;
 }
 
-/* Return a completed string that starts with partial. */
+
+/* 
+ * Return a completed string that starts with partial.
+ */
 char *
 completions_complete (rp_completions *c, char *partial, int direction)
 {

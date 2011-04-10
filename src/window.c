@@ -36,7 +36,10 @@ LIST_HEAD(rp_mapped_window);
 
 struct numset *rp_window_numset;
 
-/* Get the mouse position relative to the the specified window */
+
+/*
+ * Get the mouse position relative to the the specified window 
+ */
 static void
 get_mouse_position (rp_window *win, int *mouse_x, int *mouse_y)
 {
@@ -46,6 +49,7 @@ get_mouse_position (rp_window *win, int *mouse_x, int *mouse_y)
 
   XQueryPointer (dpy, win->scr->root, &root_win, &child_win, mouse_x, mouse_y, &root_x, &root_y, &mask);
 }
+
 
 void
 free_window (rp_window *w)
@@ -61,6 +65,7 @@ free_window (rp_window *w)
 
   free (w);
 }
+
 
 void
 update_window_gravity (rp_window *win)
@@ -79,6 +84,7 @@ update_window_gravity (rp_window *win)
 /*       win->gravity = win->hints->win_gravity; */
 /*     } */
 }
+
 
 char *
 window_name (rp_window *win)
@@ -111,8 +117,11 @@ window_name (rp_window *win)
   return NULL;
 }
 
-/* FIXME: we need to verify that the window is running on the same
-   host as something. otherwise there could be overlapping PIDs. */
+
+/* 
+ * FIXME: we need to verify that the window is running on the same host as
+ * something. otherwise there could be overlapping PIDs.
+ */
 struct rp_child_info *
 get_child_info (Window w)
 {
@@ -168,7 +177,10 @@ get_child_info (Window w)
   return NULL;
 }
 
-/* Allocate a new window and add it to the list of managed windows */
+
+/* 
+ * Allocate a new window and add it to the list of managed windows.
+ */
 rp_window *
 add_to_window_list (rp_screen *s, Window w)
 {
@@ -234,7 +246,10 @@ add_to_window_list (rp_screen *s, Window w)
   return new_window;
 }
 
-/* Check to see if the window is in the list of windows. */
+
+/* 
+ * Check to see if the window is in the list of windows.
+ */
 rp_window *
 find_window_in_list (Window w, struct list_head *list)
 {
@@ -248,7 +263,10 @@ find_window_in_list (Window w, struct list_head *list)
   return NULL;
 }
 
-/* Check to see if the window is in any of the lists of windows. */
+
+/*
+ * Check to see if the window is in any of the lists of windows.
+ */
 rp_window *
 find_window (Window w)
 {
@@ -273,11 +291,13 @@ find_window (Window w)
   return win;
 }
 
+
 void
 set_current_window (rp_window *win)
 {
   set_frames_window (current_frame(), win);
 }
+
 
 rp_window *
 find_window_number (int n)
@@ -294,6 +314,7 @@ find_window_number (int n)
   return NULL;
 }
 
+
 rp_window *
 find_window_name (char *name)
 {
@@ -309,8 +330,11 @@ find_window_name (char *name)
   return NULL;
 }
 
-/* Return the previous window in the list. Assumes window is in the
-   mapped window list. */
+
+/* 
+ * Return the previous window in the list. Assumes window is in the mapped
+ * window list.
+ */
 rp_window*
 find_window_prev (rp_window *w)
 {
@@ -331,8 +355,11 @@ find_window_prev (rp_window *w)
   return NULL;
 }
 
-/* Return the next window in the list. Assumes window is in the mapped
-   window list. */
+
+/* 
+ * Return the next window in the list. Assumes window is in the mapped window
+ * list. 
+ */
 rp_window*
 find_window_next (rp_window *w)
 {
@@ -353,6 +380,7 @@ find_window_next (rp_window *w)
   return NULL;
 }
 
+
 rp_window *
 find_window_other (rp_screen *screen)
 {
@@ -360,9 +388,10 @@ find_window_other (rp_screen *screen)
 }
 
 
-
-/* Assumes the list is sorted by increasing number. Inserts win into
-   to Right place to keep the list sorted. */
+/* 
+ * Assumes the list is sorted by increasing number. Inserts win into to Right
+ * place to keep the list sorted. 
+ */
 void
 insert_into_list (rp_window *win, struct list_head *list)
 {
@@ -379,6 +408,7 @@ insert_into_list (rp_window *win, struct list_head *list)
 
   list_add_tail(&win->node, list);
 }
+
 
 static void
 save_mouse_position (rp_window *win)
@@ -400,7 +430,10 @@ save_mouse_position (rp_window *win)
   ignore_badwindow--;
 }
 
-/* Takes focus away from last_win and gives focus to win */
+
+/*
+ * Takes focus away from last_win and gives focus to win.
+ */
 void
 give_window_focus (rp_window *win, rp_window *last_win)
 {
@@ -547,11 +580,13 @@ is_transient_ancestor (rp_window *win, rp_window *transient_for)
 }
 #endif
 
-/* Gets frame from window -- helper to set_active_window_body
+
+/*
+ * Gets frame from window -- helper to set_active_window_body
  *
- * While this fct returns a value, it also modifies a param, last_frame,
- * which is ugly... but since this is trying to fix ugly code I guess it
- * can be a little ugly.
+ * While this fct returns a value, it also modifies a param, last_frame, which
+ * is ugly... but since this is trying to fix ugly code I guess it can be a
+ * little ugly.
  */
 static rp_frame*
 get_frame(rp_window *win, rp_frame *last_frame)
@@ -585,7 +620,10 @@ get_frame(rp_window *win, rp_frame *last_frame)
   return frame;
 }
 
-/* Finds a non-dedicated frame -- helper to set_active_window_body */
+
+/* 
+ * Finds a non-dedicated frame -- helper to set_active_window_body 
+ */
 static void
 find_non_dedicated_frame(rp_window *win, rp_frame *frame, rp_frame *last_frame)
 {
@@ -637,16 +675,21 @@ find_non_dedicated_frame(rp_window *win, rp_frame *frame, rp_frame *last_frame)
     }
 }
 
-/* In the current frame, set the active window to win. win will have focus. */
+
+/* 
+ * In the current frame, set the active window to win. win will have focus.
+ */
 void set_active_window (rp_window *win)
 {
   set_active_window_body(win, 0);
 }
 
+
 void set_active_window_force (rp_window *win)
 {
   set_active_window_body(win, 1);
 }
+
 
 void
 set_active_window_body (rp_window *win, int force)
@@ -692,8 +735,10 @@ set_active_window_body (rp_window *win, int force)
   hook_run (&rp_switch_win_hook);
 }
 
-/* Go to the window, switching frames if the window is already in a
-   frame. */
+
+/* 
+ * Go to the window, switching frames if the window is already in a frame. 
+ */
 void
 goto_window (rp_window *win)
 {
@@ -714,6 +759,7 @@ goto_window (rp_window *win)
     }
 }
 
+
 void
 print_window_information (rp_group *group, rp_window *win)
 {
@@ -729,9 +775,12 @@ print_window_information (rp_group *group, rp_window *win)
                            window_name(win), group->number);
 }
 
-/* get the window list and store it in buffer delimiting each window
-   with delim. mark_start and mark_end will be filled with the text
-   positions for the start and end of the current window. */
+
+/* 
+ * Get the window list and store it in buffer delimiting each window with delim.
+ * mark_start and mark_end will be filled with the text positions for the start
+ * and end of the current window. 
+ */
 void
 get_window_list (char *fmt, char *delim, struct sbuf *buffer,
                  int *mark_start, int *mark_end)
@@ -781,11 +830,13 @@ get_window_list (char *fmt, char *delim, struct sbuf *buffer,
     }
 }
 
+
 void
 init_window_stuff (void)
 {
   rp_window_numset = numset_new ();
 }
+
 
 void
 free_window_stuff (void)
@@ -810,6 +861,7 @@ free_window_stuff (void)
 
   numset_free (rp_window_numset);
 }
+
 
 rp_frame *
 win_get_frame (rp_window *win)
