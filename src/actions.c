@@ -2809,19 +2809,17 @@ cmd_time (int interactive UNUSED, struct cmdarg **args UNUSED)
   struct tm *ptr;
   char timestr[80];
 
-  char *msg;
+  struct sbuf *msg;
   cmdret *ret;
 
   lt = time(NULL);
   ptr = localtime(&lt);
 
-  strftime(timestr, 100, defaults.timefmt_string, ptr);
-  msg = xmalloc(strlen(timestr));
-  strncpy(msg, timestr, strlen(timestr) + 1);
+  strftime(timestr, sizeof(timestr), defaults.timefmt_string, ptr);
+  msg = sbuf_new(0);
+  sbuf_copy(msg, timestr);
 
-  ret = cmdret_new (RET_SUCCESS, "%s", msg);
-  free (msg);
-
+  ret = cmdret_new (RET_SUCCESS, "%s", sbuf_free_struct(msg));
   return ret;
 }
 
