@@ -24,9 +24,13 @@
 
 #include <stdlib.h>
 
-struct
-sbuf
-{
+/*
+ * The sbuf structure (``string buffer'') allows for easy string manipulation. A
+ * struct sbuf maintains the actual string itself (char *data) along with its
+ * length (size_t len), which is automatically updated, and its maximum size
+ * (size_t maxsz).
+ */
+struct sbuf {
   char *data;
   size_t len;
   size_t maxsz;
