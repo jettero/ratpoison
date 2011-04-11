@@ -37,6 +37,9 @@ The not so big differences:
   
   * :fdump and :sfdump don't have trailing commas.
 
+  * The abort command is mapped to C-t ESC by default. I mean, that just makes
+    sense, not C-t C-g.
+
 
 Stuff I want to do:
 

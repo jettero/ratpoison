@@ -756,7 +756,7 @@ initialize_default_keybindings (void)
 
   add_keybinding (prefix_key.sym, prefix_key.state, "other", map);
   add_keybinding (prefix_key.sym, 0, "meta", map);
-  add_keybinding (XK_g, RP_CONTROL_MASK, "abort", map);
+  add_keybinding (XK_Escape, 0, "abort", map);
   add_keybinding (XK_0, 0, "select 0", map);
   add_keybinding (XK_1, 0, "select 1", map);
   add_keybinding (XK_2, 0, "select 2", map);
