@@ -29,7 +29,7 @@ MAINTAINERCLEANFILES	= Makefile.in aclocal.m4 \
 
 SUBDIRS			= src doc contrib
 
-doc_DATA		= AUTHORS COPYING ChangeLog NEWS README
+doc_DATA		= AUTHORS COPYING NEWS README
 
 EXTRA_DIST		= $(doc_DATA)
 
