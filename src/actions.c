@@ -58,6 +58,7 @@ static cmdret * set_maxsizegravity    (struct cmdarg **args);
 static cmdret * set_bargravity        (struct cmdarg **args);
 static cmdret * set_font              (struct cmdarg **args);
 static cmdret * set_timefmt           (struct cmdarg **args);
+static cmdret * set_termprog          (struct cmdarg **args);
 static cmdret * set_padding           (struct cmdarg **args);
 static cmdret * set_border            (struct cmdarg **args);
 static cmdret * set_barborder         (struct cmdarg **args);
@@ -130,6 +131,7 @@ init_set_vars(void)
   add_set_var("bargravity",     set_bargravity,     1, "", arg_GRAVITY);
   add_set_var("font",           set_font,           1, "", arg_STRING);
   add_set_var("timefmt",        set_timefmt,        1, "", arg_STRING);
+  add_set_var("termprog",       set_termprog,       1, "", arg_STRING);
   add_set_var("padding", set_padding, 4,
               "", arg_NUMBER, "", arg_NUMBER, "", arg_NUMBER, "", arg_NUMBER);
   add_set_var("border",       set_border,       1, "", arg_NUMBER);
@@ -315,7 +317,7 @@ init_user_commands(void)
   add_command ("other",         cmd_other,      0, 0, 0);
   add_command ("prev",          cmd_prev,       0, 0, 0);
   add_command ("prevscreen",    cmd_prevscreen, 0, 0, 0);
-  add_command ("quit",          cmd_quit,       0, 0, 0);
+  add_command ("quit",          cmd_quit,       2, 0, 0);
   add_command ("ratinfo",       cmd_ratinfo,    0, 0, 0);
   add_command ("ratrelinfo",    cmd_ratrelinfo, 0, 0, 0);
   add_command ("banishrel",     cmd_banishrel,  0, 0, 0);
@@ -360,6 +362,7 @@ init_user_commands(void)
                "Screen: ", arg_NUMBER);
   add_command ("startup_message", cmd_startup_message,  1, 1, 1,
                "Startup message: ", arg_STRING);
+  add_command ("terminal",      cmd_terminal,   0, 0, 0);
   add_command ("time",          cmd_time,       0, 0, 0);
   add_command ("title",         cmd_rename,     1, 1, 1,
                "Set window's title to: ", arg_REST);
@@ -778,11 +781,18 @@ initialize_default_keybindings (void)
   add_keybinding (XK_a, RP_CONTROL_MASK, "time", map);
   add_keybinding (XK_b, 0, "banish", map);
   add_keybinding (XK_b, RP_CONTROL_MASK, "banish", map);
-  add_keybinding (XK_c, 0, "exec " TERM_PROG, map);
-  add_keybinding (XK_c, RP_CONTROL_MASK, "exec " TERM_PROG, map);
+  add_keybinding (XK_c, 0, "terminal", map);
+  add_keybinding (XK_c, RP_CONTROL_MASK, "terminal", map);
   add_keybinding (XK_colon, 0, "colon", map);
   add_keybinding (XK_exclam, 0, "exec", map);
-  add_keybinding (XK_exclam, RP_CONTROL_MASK, "colon exec " TERM_PROG " -e ", map);
+
+  /* We're constructing the string "colon exec [termprog] -e ". */
+  struct sbuf *t = sbuf_new(0);
+  sbuf_concat(t, "colon exec ");
+  sbuf_concat(t, defaults.termprog_string);
+  sbuf_concat(t, " -e ");
+  add_keybinding (XK_exclam, RP_CONTROL_MASK, sbuf_free_struct(t), map);
+
   add_keybinding (XK_i, 0, "info", map);
   add_keybinding (XK_i, RP_CONTROL_MASK, "info", map);
   add_keybinding (XK_k, 0, "delete", map);
@@ -2793,6 +2803,18 @@ cmd_quit(int interactive UNUSED, struct cmdarg **args UNUSED)
 }
 
 
+/*
+ * Spawns a new terminal in the current frame, according to the "termprog"
+ * setting. It is equivalent to running ":exec [termprog]."
+ */
+cmdret *
+cmd_terminal (int interactive UNUSED, struct cmdarg **args UNUSED)
+{
+  spawn(defaults.termprog_string, 0, current_frame());
+  return cmdret_new(RET_SUCCESS, NULL);
+}
+
+
 /* Show the current time on the bar. Thanks to Martin Samuelsson
  * <cosis@lysator.liu.se> for the patch. Thanks to Jonathan Walther
  * <krooger@debian.org> for making it pretty. 
@@ -3932,6 +3954,18 @@ set_timefmt (struct cmdarg **args)
   }
 
   defaults.timefmt_string = xstrdup(ARG_STRING(0));
+  return cmdret_new(RET_SUCCESS, NULL);
+}
+
+
+static cmdret *
+set_termprog (struct cmdarg **args)
+{
+  if (args[0] == NULL) {
+    return cmdret_new(RET_SUCCESS, "%s", defaults.termprog_string);
+  }
+
+  defaults.termprog_string = xstrdup(ARG_STRING(0));
   return cmdret_new(RET_SUCCESS, NULL);
 }
 

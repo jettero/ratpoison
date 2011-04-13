@@ -224,6 +224,7 @@ struct rp_defaults {
   char *font_string;
 
   char *timefmt_string;
+  char *termprog_string;
 
   char *fgcolor_string;
   char *bgcolor_string;

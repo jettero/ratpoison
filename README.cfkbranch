@@ -16,6 +16,11 @@ The big differences:
     of Ratpoison.
   
   * You can change the format of the :time command, with :set timefmt.
+  
+  * The default terminal for C-c is not a compile-time option, it is instead set
+    with :set termprog.
+  
+  * To launch a terminal, run :terminal, not :exec [termprogram].
 
   * The ``def'' commands (the setter functions for what are now :set options)
     are totally gone.
@@ -42,8 +47,6 @@ The not so big differences:
 
 
 Stuff I want to do:
-
-  * Make TERM_PROG a :set option instead of a compile-time option.
 
   * Document pretty much everything.
 

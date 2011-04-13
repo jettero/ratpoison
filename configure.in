@@ -37,10 +37,6 @@ AC_ARG_ENABLE(debug,AC_HELP_STRING([--enable-debug],[build with extra debugging 
 		AC_MSG_RESULT(no)
 	fi],[AC_MSG_RESULT(no)])
 
-AC_ARG_WITH(xterm,AC_HELP_STRING([--with-xterm=PROG],[set the x terminal emulator used by ratpoison]),
-term_prog=$withval, term_prog="xterm")
-AC_DEFINE_UNQUOTED(TERM_PROG, "$term_prog", X terminal emulator to use)
-
 dnl We need Xft. Right now we look for it without letting anyone know.
 dnl TODO: Add a "checking for Xft.... yes" bit.
 CFLAGS="$CFLAGS `pkg-config --cflags xft`"

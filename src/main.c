@@ -564,6 +564,7 @@ init_defaults (void)
   defaults.font_string = xstrdup (DEFAULT_XFT_FONT);
 
   defaults.timefmt_string = xstrdup ("%a %b %d %k:%M:%S %Y");
+  defaults.termprog_string = xstrdup ("xterm");
 
   defaults.fgcolor_string = xstrdup ("black");
   defaults.bgcolor_string = xstrdup ("white");

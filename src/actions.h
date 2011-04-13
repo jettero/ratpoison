@@ -179,6 +179,7 @@ RP_CMD (setenv);
 RP_CMD (shrink);
 RP_CMD (source);
 RP_CMD (startup_message);
+RP_CMD (terminal);
 RP_CMD (time);
 RP_CMD (tmpwm);
 RP_CMD (unalias);
