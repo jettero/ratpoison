@@ -317,7 +317,7 @@ init_user_commands(void)
   add_command ("other",         cmd_other,      0, 0, 0);
   add_command ("prev",          cmd_prev,       0, 0, 0);
   add_command ("prevscreen",    cmd_prevscreen, 0, 0, 0);
-  add_command ("quit",          cmd_quit,       2, 0, 0);
+  add_command ("quit",          cmd_quit,       0, 0, 0);
   add_command ("ratinfo",       cmd_ratinfo,    0, 0, 0);
   add_command ("ratrelinfo",    cmd_ratrelinfo, 0, 0, 0);
   add_command ("banishrel",     cmd_banishrel,  0, 0, 0);
