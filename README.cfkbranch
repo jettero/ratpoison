@@ -12,6 +12,10 @@ Ratpoison.
 
 The big differences:
 
+  * Upstream Ratpoison has a goal of behaving just like GNU Screen, but I want
+    this Ratpoison to just behave ``naturally,'' whatever that may mean. I.e., I
+    don't really care what Screen does or doesn't do.
+
   * Xft is required. You have to have it installed in order to run this version
     of Ratpoison.
   
