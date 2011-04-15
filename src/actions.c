@@ -787,6 +787,7 @@ initialize_default_keybindings (void)
   add_keybinding (XK_exclam, 0, "exec", map);
 
   /* We're constructing the string "colon exec [termprog] -e ". */
+  /* FIXME: This shows up on they keybinding map only as ":exec xterm -e" */
   struct sbuf *t = sbuf_new(0);
   sbuf_concat(t, "colon exec ");
   sbuf_concat(t, defaults.termprog_string);
