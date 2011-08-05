@@ -8,12 +8,20 @@ use common::sense;
 use Inline Config=>DIRECTORY=>"$ENV{HOME}/.ratsloppy_c_";
 use Inline C=>DATA=>LIBS =>"-L/usr/X11R6/lib -lX11";
 
+sub create_notify_callback {
+    print "create_notify(): @_\n";
+}
+
+sub kepress_callback {
+    print "keypress(): @_\n";
+}
+
 sub enter_notify_callback {
     print "enter_notify(): @_\n";
 }
 
 print "listening for window entries…\n";
-sloppy(\&enter_notify_callback);
+sloppy(\&enter_notify_callback, \&create_notify_callback, \&kepress_callback);
 
 __END__
 __C__
@@ -32,9 +40,10 @@ int errorhandler(Display *display, XErrorEvent *error) {
     return 0;
 }
 
-int sloppy(SV *enter_notify_callback) {
+int sloppy(SV *enter_notify_callback, SV *create_notify_callback, SV *keypress_callback) {
     Display *display;
     int i, numscreens;
+    SV *window;
 
     display = XOpenDisplay(NULL);
 
@@ -63,12 +72,23 @@ int sloppy(SV *enter_notify_callback) {
         do {
             XNextEvent(display, &event);
 
-            if (event.type == CreateNotify)
+            if (event.type == CreateNotify) {
                 XSelectInput(display, event.xcreatewindow.window, EnterWindowMask);
+
+                window = newSViv(event.xcreatewindow.window);
+
+                dSP; // make a new local stack
+
+                PUSHMARK(SP); // start pushing
+                XPUSHs(window); // push the sv as a mortal
+                PUTBACK; // end the stack
+
+                call_sv(create_notify_callback, G_DISCARD);
+            }
 
         } while(event.type != EnterNotify);
 
-        SV * window = newSViv(event.xcrossing.window);
+        window = newSViv(event.xcrossing.window);
 
         dSP; // make a new local stack
 
