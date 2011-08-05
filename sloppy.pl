@@ -22,12 +22,21 @@ sub kepress_callback {
     print "keypress(): @_\n";
 }
 
+sub mousemove_callback {
+    print "mousemove(): @_\n";
+}
+
 sub enter_notify_callback {
     print "enter_notify(): @_\n";
 }
 
 print "listening for window entries…\n";
-sloppy(\&enter_notify_callback, \&create_notify_callback, \&kepress_callback);
+sloppy(
+    \&enter_notify_callback,
+    \&create_notify_callback,
+    \&kepress_callback,
+    \&mousemove_callback,
+);
 
 __END__
 __C__
@@ -46,10 +55,23 @@ int errorhandler(Display *display, XErrorEvent *error) {
     return 0;
 }
 
-int sloppy(SV *enter_notify_callback, SV *create_notify_callback, SV *keypress_callback) {
+void call_perl(SV *callback, long _a) {
+    SV *argument = newSViv(_a);
+
+    dSP; // make a new local stack
+
+    PUSHMARK(SP); // start pushing
+    XPUSHs(argument); // push the sv as a mortal
+    PUTBACK; // end the stack
+
+    call_sv(callback, G_DISCARD);
+}
+
+int sloppy(SV *enter_notify_callback, SV *create_notify_callback, SV *keypress_callback, SV *mousemove_callback) {
     Display *display;
     int i, numscreens;
     SV *window;
+    long event_mask = EnterWindowMask| PointerMotionHintMask | KeyReleaseMask;
 
     display = XOpenDisplay(NULL);
 
@@ -68,45 +90,39 @@ int sloppy(SV *enter_notify_callback, SV *create_notify_callback, SV *keypress_c
         XSelectInput(display,RootWindow(display, i), SubstructureNotifyMask);
         XQueryTree(display, RootWindow(display, i), &dw1, &dw2, &wins, &nwins);
         for (j=0; j<nwins; j++)
-            XSelectInput(display, wins[j], EnterWindowMask);
+            XSelectInput(display, wins[j], event_mask);
     }
 
 
     while (1) {
         XEvent event;
 
-        do {
-            XNextEvent(display, &event);
+        XNextEvent(display, &event);
 
-            if (event.type == CreateNotify) {
-                XSelectInput(display, event.xcreatewindow.window, EnterWindowMask);
+        printf("event.type: %d\n", event.type);
 
-                window = newSViv(event.xcreatewindow.window);
+        switch(event.type) {
+            case CreateNotify:
+                XSelectInput(display, event.xcreatewindow.window, event_mask);
+                call_perl(create_notify_callback, event.xcreatewindow.window);
+                break;
 
-                dSP; // make a new local stack
+            case EnterNotify:
+                call_perl(create_notify_callback, event.xcrossing.window);
+                break;
 
-                PUSHMARK(SP); // start pushing
-                XPUSHs(window); // push the sv as a mortal
-                PUTBACK; // end the stack
+            case KeyRelease:
+                call_perl(keypress_callback, 0);
+                break;
 
-                call_sv(create_notify_callback, G_DISCARD);
-            }
-
-        } while(event.type != EnterNotify);
-
-        window = newSViv(event.xcrossing.window);
-
-        dSP; // make a new local stack
-
-        PUSHMARK(SP); // start pushing
-        XPUSHs(window); // push the sv as a mortal
-        PUTBACK; // end the stack
-
-        call_sv(enter_notify_callback, G_DISCARD);
+            case MotionNotify:
+                call_perl(mousemove_callback, 0);
+                break;
+        }
     }
 
 
-    XCloseDisplay (display);
+    XCloseDisplay(display);
 
     printf("sloppy\n");
 
