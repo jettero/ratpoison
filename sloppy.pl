@@ -7,7 +7,11 @@ use Inline C=>DATA=>LIBS =>"-L/usr/X11R6/lib -lX11";
 # NOTE: callbacks to perl
 # http://www.perlmonks.org/?node_id=507831
 
-sloppy();
+sub enter_notify_callback {
+    print "enter_notify(): @_\n";
+}
+
+sloppy( \&enter_notify_callback );
 
 __END__
 __C__
@@ -26,7 +30,7 @@ int errorhandler(Display *display, XErrorEvent *error) {
     return 0;
 }
 
-int sloppy() {
+int sloppy(SV *enter_notify_callback) {
     Display *display;
     int i, numscreens;
 
@@ -63,6 +67,7 @@ int sloppy() {
         } while(event.type != EnterNotify);
 
         printf("window id: %ld\n", event.xcrossing.window);
+        call_sv( enter_notify_callback, G_VOID );
     }
 
 
