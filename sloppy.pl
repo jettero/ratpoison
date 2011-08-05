@@ -62,7 +62,7 @@ int sloppy() {
 
         } while(event.type != EnterNotify);
 
-        printf("window id: %ld\n");
+        printf("window id: %ld\n", event.xcrossing.window);
     }
 
 
