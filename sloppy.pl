@@ -17,6 +17,15 @@ __C__
 #include <X11/Xutil.h>
 #include <X11/Xproto.h>
 
+int (*defaulthandler)();
+
+int errorhandler(Display *display, XErrorEvent *error) {
+    if(error->error_code != BadWindow)
+        (*defaulthandler)(display,error);
+
+    return 0;
+}
+
 int sloppy() {
     Display *display;
     int i, numscreens;
@@ -25,9 +34,10 @@ int sloppy() {
 
     if(!display) {
         perror("could not open display");
-        exit(1);
+        return 1;
     }
 
+    defaulthandler = XSetErrorHandler(errorhandler);
     numscreens = ScreenCount(display);
 
     for (i=0; i<numscreens; i++) {
@@ -40,7 +50,25 @@ int sloppy() {
             XSelectInput(display, wins[j], EnterWindowMask);
     }
 
+
+    while (1) {
+        XEvent event;
+
+        do {
+            XNextEvent(display, &event);
+
+            if (event.type == CreateNotify)
+                XSelectInput(display, event.xcreatewindow.window, EnterWindowMask);
+
+        } while(event.type != EnterNotify);
+
+        printf("window id: %ld\n");
+    }
+
+
     XCloseDisplay (display);
 
     printf("sloppy\n");
+
+    return 0;
 }
