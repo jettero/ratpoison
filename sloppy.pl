@@ -11,7 +11,8 @@ sub enter_notify_callback {
     print "enter_notify(): @_\n";
 }
 
-sloppy( \&enter_notify_callback );
+my $enc = \&enter_notify_callback;
+sloppy( $enc );
 
 __END__
 __C__
@@ -30,8 +31,7 @@ int errorhandler(Display *display, XErrorEvent *error) {
     return 0;
 }
 
-int sloppy(SV *_enter_notify_callback) {
-    SV *enter_notify_callback = SvREFCNT_inc(SvRV(_enter_notify_callback));
+int sloppy(SV *enter_notify_callback) {
     Display *display;
     int i, numscreens;
 
