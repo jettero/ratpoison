@@ -12,7 +12,7 @@ sub enter_notify_callback {
 }
 
 print "listening for window entries…\n";
-sloppy();
+sloppy(\&enter_notify_callback);
 
 __END__
 __C__
@@ -31,7 +31,7 @@ int errorhandler(Display *display, XErrorEvent *error) {
     return 0;
 }
 
-int sloppy() {
+int sloppy(SV *enter_notify_callback) {
     Display *display;
     int i, numscreens;
 
@@ -67,13 +67,15 @@ int sloppy() {
 
         } while(event.type != EnterNotify);
 
-        printf("window id: %ld\n", event.xcrossing.window);
+        SV * window = newSViv(event.xcrossing.window);
 
-        inline_stack_vars;
-        inline_stack_push(newSViv(event.xcrossing.window));
-        inline_stack_done;
-        perl_call_pv("main::enter_notify_callback", 0);
-        // inline_stack_void; // NOTE: this returns from the function, but does skipping it leak memory?
+        dSP; // make a new local stack
+
+        PUSHMARK(SP); // start pushing
+        XPUSHs(window); // push the sv as a mortal
+        PUTBACK; // end the stack
+
+        call_sv(enter_notify_callback, G_DISCARD);
     }
 
 
