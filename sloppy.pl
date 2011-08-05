@@ -30,7 +30,8 @@ int errorhandler(Display *display, XErrorEvent *error) {
     return 0;
 }
 
-int sloppy(SV *enter_notify_callback) {
+int sloppy(SV *_enter_notify_callback) {
+    SV *enter_notify_callback = SvREFCNT_inc(SvRV(_enter_notify_callback));
     Display *display;
     int i, numscreens;
 
