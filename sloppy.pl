@@ -1,5 +1,9 @@
 #!/usr/bin/perl
 
+# ALL Xlib logic shamelessly lifted from: Copyright (C) 2005 Shawn Betts <sabetts@vcn.bc.ca>
+# sloppy.c was GPL2, so is this.  See that file for further info.
+# This file is Copyright © 2011 — Paul Miller <jettero@gmail.com>
+
 use common::sense;
 use Inline Config=>DIRECTORY=>"$ENV{HOME}/.ratsloppy_c_";
 use Inline C=>DATA=>LIBS =>"-L/usr/X11R6/lib -lX11";
