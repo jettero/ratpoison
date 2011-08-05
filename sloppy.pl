@@ -8,9 +8,6 @@ use common::sense;
 use Inline Config=>DIRECTORY=>"$ENV{HOME}/.ratsloppy_c_";
 use Inline C=>DATA=>LIBS =>"-L/usr/X11R6/lib -lX11";
 
-# NOTE: callbacks to perl
-# http://www.perlmonks.org/?node_id=507831
-
 sub enter_notify_callback {
     print "enter_notify(): @_\n";
 }
