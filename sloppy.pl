@@ -11,8 +11,8 @@ sub enter_notify_callback {
     print "enter_notify(): @_\n";
 }
 
-my $enc = \&enter_notify_callback;
-sloppy( $enc );
+print "listening for window entries…\n";
+sloppy();
 
 __END__
 __C__
@@ -31,7 +31,7 @@ int errorhandler(Display *display, XErrorEvent *error) {
     return 0;
 }
 
-int sloppy(SV *enter_notify_callback) {
+int sloppy() {
     Display *display;
     int i, numscreens;
 
@@ -68,7 +68,12 @@ int sloppy(SV *enter_notify_callback) {
         } while(event.type != EnterNotify);
 
         printf("window id: %ld\n", event.xcrossing.window);
-        call_sv( enter_notify_callback, G_VOID );
+
+        inline_stack_vars;
+        inline_stack_push(newSViv(event.xcrossing.window));
+        inline_stack_done;
+        perl_call_pv("main::enter_notify_callback", 0);
+        // inline_stack_void; // NOTE: this returns from the function, but does skipping it leak memory?
     }
 
 
