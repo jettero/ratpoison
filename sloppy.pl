@@ -73,14 +73,17 @@ void traverse_windows(Display *d, Window w) {
     Window dw1, dw2, *wins;
     unsigned int i,nwins;
 
-    XSelectInput(d, w, event_mask);
     if( !XQueryTree(d, w, &dw1, &dw2, &wins, &nwins) ) {
         perror("XQueryTree() failure");
         exit(1);
     }
 
-    for(i=0; i<nwins; i++)
-        traverse_windows(d, wins[i]);
+    if( !nwins )
+        XSelectInput(d, w, event_mask);
+
+    else
+        for(i=0; i<nwins; i++)
+            traverse_windows(d, wins[i]);
 
     if(wins)
         XFree(wins);
