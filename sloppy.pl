@@ -14,19 +14,24 @@ use common::sense;
 use Inline Config=>DIRECTORY=>$sloppy_location;
 use Inline C=>DATA=>LIBS=>"-L/usr/X11R6/lib -lX11";
 
-sub create_notify_callback {
-    print "create_notify(): @_\n";
-}
+sub event_callback {
+    my $event = shift;
 
-sub enter_notify_callback {
-    print "enter_notify(): @_\n";
+    # see /usr/include/X11/X.h near #define KeyPress 2
+    given( $event ) {
+        when( 7 ) {
+            my $window = shift;
+            print "select window=$window\n";
+        }
+
+        default {
+            print "unhandled event_callback(@_)\n";
+        }
+    }
 }
 
 print "listening for window entries…\n";
-sloppy(
-    \&enter_notify_callback,
-    \&create_notify_callback,
-);
+sloppy( \&event_callback );
 
 __END__
 __C__
@@ -36,7 +41,7 @@ __C__
 #include <X11/Xutil.h>
 #include <X11/Xproto.h>
 
-#define event_mask (EnterWindowMask)
+#define event_mask (EnterWindowMask | KeyPressMask | FocusChangeMask)
 
 int (*defaulthandler)();
 
@@ -47,13 +52,12 @@ int errorhandler(Display *display, XErrorEvent *error) {
     return 0;
 }
 
-void call_perl(SV *callback, long _a) {
-    SV *argument = newSViv(_a);
-
+void call_perl(SV *callback, long _e, long _o) {
     dSP; // make a new local stack
 
     PUSHMARK(SP); // start pushing
-    XPUSHs(argument); // push the sv as a mortal
+    XPUSHs(newSViv(_e)); // push the sv as a mortal
+    XPUSHs(newSViv(_o)); // push the sv as a mortal
     PUTBACK; // end the stack
 
     call_sv(callback, G_DISCARD);
@@ -79,7 +83,7 @@ void traverse_windows(Display *d, Window w, unsigned int depth) {
         XFree(wins);
 }
 
-void sloppy(SV *enter_notify_callback, SV *create_notify_callback) {
+void sloppy(SV *event_callback) {
     Display *display;
     int i, numscreens;
 
@@ -96,7 +100,7 @@ void sloppy(SV *enter_notify_callback, SV *create_notify_callback) {
     for (i=0; i<numscreens; i++)
         traverse_windows(display, RootWindow(display, i), 0);
 
-    while (1) {
+    while(1) {
         XEvent event;
 
         XNextEvent(display, &event);
@@ -104,15 +108,15 @@ void sloppy(SV *enter_notify_callback, SV *create_notify_callback) {
         switch(event.type) {
             case CreateNotify:
                 XSelectInput(display, event.xcreatewindow.window, event_mask);
-                call_perl(create_notify_callback, event.xcreatewindow.window);
+                call_perl(event_callback, event.type, event.xcreatewindow.window);
                 break;
 
             case EnterNotify:
-                call_perl(enter_notify_callback, event.xcrossing.window);
+                call_perl(event_callback, event.type, event.xcrossing.window);
                 break;
 
             default:
-                printf("uhandled event.type: %d\n", event.type);
+                call_perl(event_callback, event.type, 0);
                 break;
         }
     }
