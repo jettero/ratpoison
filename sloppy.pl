@@ -57,7 +57,7 @@ sub event_callback {
                     if( my ($status, $window, $xid) = m/^\s*([-+*])\s+(\d+)\s+(\d+)/ ) {
                         if( $target_xid == $xid ) {
                             if( $status eq "-" ) {
-                                print "move mouse to $window/$xid\n";
+                                banish_rat_kindof(); # uses last FocusIn window
                             }
 
                             last;
@@ -86,6 +86,9 @@ __C__
 #include <X11/Xproto.h>
 
 #define event_mask (EnterWindowMask | FocusChangeMask)
+
+Display *_last_display;
+Window  *_last_window;
 
 int (*defaulthandler)();
 
@@ -160,6 +163,8 @@ void sloppy(SV *event_callback) {
                 break;
 
             case FocusIn:
+                _last_display = display;
+                _last_window  = event.xfocus.window;
                 call_perl(event_callback, event.type, event.xfocus.window);
                 break;
 
@@ -174,4 +179,12 @@ void sloppy(SV *event_callback) {
     XCloseDisplay(display);
 
     printf("sloppy\n");
+}
+
+void banish_rat_kindof() {
+    XWindowAttributes attrs;
+    XGetWindowAttributes(_last_display, _last_window, &attrs);
+    printf("banish_rat_kindof() working: width=%d, height=%d\n", attrs.width, attrs.height);
+
+    XWarpPointer(_last_display, None, _last_window, 0, 0, 0, 0, attrs.width-25, 25);
 }
