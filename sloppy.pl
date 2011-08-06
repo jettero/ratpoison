@@ -70,7 +70,7 @@ sub event_callback {
             }
         }
 
-        default { print "unhandled event_callback($event, @_)\n"; }
+        # default { print "unhandled event_callback($event, @_)\n"; }
     }
 }
 
@@ -113,8 +113,6 @@ void call_perl(SV *callback, long _e, long _o) {
 void traverse_windows(Display *d, Window w, unsigned int depth) {
     Window dw1, dw2, *wins;
     unsigned int i,nwins;
-
-    // printf("%*s%ld\n", depth, "", w);
 
     if( !XQueryTree(d, w, &dw1, &dw2, &wins, &nwins) ) {
         perror("XQueryTree() failure");
@@ -177,14 +175,11 @@ void sloppy(SV *event_callback) {
 
 
     XCloseDisplay(display);
-
-    printf("sloppy\n");
 }
 
 void banish_rat_kindof() {
     XWindowAttributes attrs;
     XGetWindowAttributes(_last_display, _last_window, &attrs);
-    printf("banish_rat_kindof() working: width=%d, height=%d\n", attrs.width, attrs.height);
 
     XWarpPointer(_last_display, None, _last_window, 0, 0, 0, 0, attrs.width-25, 25);
 }
