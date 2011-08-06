@@ -13,20 +13,64 @@ BEGIN {
 use common::sense;
 use Inline Config=>DIRECTORY=>$sloppy_location;
 use Inline C=>DATA=>LIBS=>"-L/usr/X11R6/lib -lX11";
+use IPC::System::Simple qw(systemx capturex);
 
+my $last_mouse_target;
 sub event_callback {
     my $event = shift;
 
     # see /usr/include/X11/X.h near #define KeyPress 2
     given( $event ) {
         when( 7 ) {
-            my $window = shift;
-            print "select window=$window\n";
+            my $target_xid = shift;
+            my @rats = capturex(qw(ratpoison -c), 'windows %s %n %i');
+            for(@rats) {
+                if( my ($status, $window, $xid) = m/^\s*([-+*])\s+(\d+)\s+(\d+)/ ) {
+                    if( $target_xid == $xid ) {
+                        if( $status eq "*" ) {
+                            print "already on $window/$xid\n";
+
+                        } elsif( $status eq "+" ) {
+                            print "noframe for $window/$xid\n";
+
+                        } else {
+                            $last_mouse_target = $target_xid;
+                            print "select $window\n";
+                            systemx(qw(ratpoison -c), "select $window");
+                        }
+
+                        last;
+                    }
+
+                } else {
+                    print "bad rat [7-$target_xid]: $_";
+                }
+            }
         }
 
-        default {
-            print "unhandled event_callback(@_)\n";
+        when( 9 ) {
+            my $target_xid = shift;
+
+            if( $target_xid != $last_mouse_target ) {
+                my @rats = capturex(qw(ratpoison -c), 'windows %s %n %i');
+                for(@rats) {
+                    if( my ($status, $window, $xid) = m/^\s*([-+*])\s+(\d+)\s+(\d+)/ ) {
+                        if( $target_xid == $xid ) {
+                            if( $status eq "-" ) {
+                                print "move mouse to $window/$xid\n";
+                            }
+
+                            last;
+                        }
+
+                    } else {
+                        print "bad rat [7-$target_xid]: $_";
+                    }
+                }
+            }
         }
+
+        default { print "unhandled event_callback($event, @_)\n"; }
     }
 }
 
@@ -41,7 +85,7 @@ __C__
 #include <X11/Xutil.h>
 #include <X11/Xproto.h>
 
-#define event_mask (EnterWindowMask | KeyPressMask | FocusChangeMask)
+#define event_mask (EnterWindowMask | FocusChangeMask)
 
 int (*defaulthandler)();
 
@@ -114,6 +158,11 @@ void sloppy(SV *event_callback) {
             case EnterNotify:
                 call_perl(event_callback, event.type, event.xcrossing.window);
                 break;
+
+            case FocusIn:
+                call_perl(event_callback, event.type, event.xfocus.window);
+                break;
+
 
             default:
                 call_perl(event_callback, event.type, 0);
