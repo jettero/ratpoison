@@ -18,14 +18,6 @@ sub create_notify_callback {
     print "create_notify(): @_\n";
 }
 
-sub kepress_callback {
-    print "keypress(): @_\n";
-}
-
-sub mousemove_callback {
-    print "mousemove(): @_\n";
-}
-
 sub enter_notify_callback {
     print "enter_notify(): @_\n";
 }
@@ -34,8 +26,6 @@ print "listening for window entries…\n";
 sloppy(
     \&enter_notify_callback,
     \&create_notify_callback,
-    \&kepress_callback,
-    \&mousemove_callback,
 );
 
 __END__
@@ -46,7 +36,7 @@ __C__
 #include <X11/Xutil.h>
 #include <X11/Xproto.h>
 
-#define event_mask (PointerMotionMask | PointerMotionHintMask | KeyPressMask | KeyReleaseMask | EnterWindowMask)
+#define event_mask (EnterWindowMask)
 
 int (*defaulthandler)();
 
@@ -69,27 +59,27 @@ void call_perl(SV *callback, long _a) {
     call_sv(callback, G_DISCARD);
 }
 
-void traverse_windows(Display *d, Window w) {
+void traverse_windows(Display *d, Window w, unsigned int depth) {
     Window dw1, dw2, *wins;
     unsigned int i,nwins;
+
+    // printf("%*s%ld\n", depth, "", w);
 
     if( !XQueryTree(d, w, &dw1, &dw2, &wins, &nwins) ) {
         perror("XQueryTree() failure");
         exit(1);
     }
 
-    if( !nwins )
-        XSelectInput(d, w, event_mask);
+    XSelectInput(d, w, depth ? event_mask : SubstructureNotifyMask);
 
-    else
-        for(i=0; i<nwins; i++)
-            traverse_windows(d, wins[i]);
+    for(i=0; i<nwins; i++)
+        traverse_windows(d, wins[i], depth+1);
 
     if(wins)
         XFree(wins);
 }
 
-void sloppy(SV *enter_notify_callback, SV *create_notify_callback, SV *keypress_callback, SV *mousemove_callback) {
+void sloppy(SV *enter_notify_callback, SV *create_notify_callback) {
     Display *display;
     int i, numscreens;
 
@@ -104,16 +94,13 @@ void sloppy(SV *enter_notify_callback, SV *create_notify_callback, SV *keypress_
     numscreens = ScreenCount(display);
 
     for (i=0; i<numscreens; i++)
-        traverse_windows(display, RootWindow(display, i));
+        traverse_windows(display, RootWindow(display, i), 0);
 
     while (1) {
         XEvent event;
 
         XNextEvent(display, &event);
 
-        printf("event.type: %d\n", event.type);
-
-        if(0)
         switch(event.type) {
             case CreateNotify:
                 XSelectInput(display, event.xcreatewindow.window, event_mask);
@@ -121,16 +108,11 @@ void sloppy(SV *enter_notify_callback, SV *create_notify_callback, SV *keypress_
                 break;
 
             case EnterNotify:
-                call_perl(create_notify_callback, event.xcrossing.window);
+                call_perl(enter_notify_callback, event.xcrossing.window);
                 break;
 
-            case KeyPress:
-            case KeyRelease:
-                call_perl(keypress_callback, 0);
-                break;
-
-            case MotionNotify:
-                call_perl(mousemove_callback, 0);
+            default:
+                printf("uhandled event.type: %d\n", event.type);
                 break;
         }
     }
