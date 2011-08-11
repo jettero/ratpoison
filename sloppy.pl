@@ -18,9 +18,9 @@ use Inline C=>DATA=>LIBS=>"-L/usr/X11R6/lib -lX11";
 use IPC::System::Simple qw(systemx capturex);
 
 eval { systemx(fuser=>-SIGTERM=>-k=>"$sloppy_location/pid") } if -f "$sloppy_location/pid";
-open my $pid, ">$sloppy_location/pid" or die "couldn't lock pidfile";
-open STDOUT, ">/dev/null" if "@ARGV" =~ m/-[a-z]*q/;
 fork and exit if "@ARGV" =~ m/-[a-z]*f/;
+open STDOUT, ">/dev/null" if "@ARGV" =~ m/-[a-z]*q/;
+open my $pid, ">$sloppy_location/pid" or die "couldn't lock pidfile";
 
 my $keypress_lockout;
 my $no_select;
