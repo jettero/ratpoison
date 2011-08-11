@@ -57,6 +57,7 @@ sub event_callback {
                     if( my ($status, $window, $xid) = m/^\s*([-+*])\s+(\d+)\s+(\d+)/ ) {
                         if( $target_xid == $xid ) {
                             if( $status eq "-" ) {
+                                print "move mouse to $last_mouse_target (!= $target_xid)\n";
                                 banish_rat_kindof(); # uses last FocusIn window
                             }
 
