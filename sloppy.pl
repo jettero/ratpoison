@@ -17,10 +17,16 @@ use Inline Config=>DIRECTORY=>$sloppy_location;
 use Inline C=>DATA=>LIBS=>"-L/usr/X11R6/lib -lX11";
 use IPC::System::Simple qw(systemx capturex);
 
+systemx(fuser=>-k=>"$sloppy_location/pid") if -f "$sloppy_location/pid";
+open my $pid, ">$sloppy_location/pid" or die "couldn't lock pidfile";
 open STDOUT, ">/dev/null" if "@ARGV" =~ m/-[a-z]*q/;
 fork and exit if "@ARGV" =~ m/-[a-z]*f/;
 
 my $keypress_lockout;
+my $no_select;
+$SIG{USR1} = sub { $no_select ++ };
+$SIG{USR2} = sub { $no_select =0 };
+$SIG{TERM} = sub { close $pid; unlink "$sloppy_location/pid" };
 
 sub event_callback {
     my $event = shift;
