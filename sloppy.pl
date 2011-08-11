@@ -15,6 +15,7 @@ use Inline Config=>DIRECTORY=>$sloppy_location;
 use Inline C=>DATA=>LIBS=>"-L/usr/X11R6/lib -lX11";
 use IPC::System::Simple qw(systemx capturex);
 
+my $keypress_lockout;
 my $last_mouse_target;
 sub event_callback {
     my $event = shift;
@@ -32,6 +33,9 @@ sub event_callback {
 
                         } elsif( $status eq "+" ) {
                             print "noframe for $window/$xid\n";
+
+                        } elsif( $keypress_lockout > time ) {
+                            print "skipping $window/$xid due to keypress lockout\n";
 
                         } else {
                             $last_mouse_target = $target_xid;
@@ -71,6 +75,13 @@ sub event_callback {
             }
         }
 
+        when( 2 ) {
+            if( $_[0]+$_[1] == 0 ) {
+                print "KeyPress(@_): locking out select events for 2 seconds\n";
+                $keypress_lockout = time + 2;
+            }
+        }
+
         # default { print "unhandled event_callback($event, @_)\n"; }
     }
 }
@@ -86,7 +97,7 @@ __C__
 #include <X11/Xutil.h>
 #include <X11/Xproto.h>
 
-#define event_mask (EnterWindowMask | FocusChangeMask)
+#define event_mask (EnterWindowMask | FocusChangeMask | KeyPressMask)
 
 Display *_last_display;
 Window  *_last_window;
@@ -100,12 +111,13 @@ int errorhandler(Display *display, XErrorEvent *error) {
     return 0;
 }
 
-void call_perl(SV *callback, long _e, long _o) {
+void call_perl(SV *callback, long _e, long _o1, long _o2) {
     dSP; // make a new local stack
 
     PUSHMARK(SP); // start pushing
     XPUSHs(newSViv(_e)); // push the sv as a mortal
-    XPUSHs(newSViv(_o)); // push the sv as a mortal
+    XPUSHs(newSViv(_o1)); // push the sv as a mortal
+    XPUSHs(newSViv(_o2)); // push the sv as a mortal
     PUTBACK; // end the stack
 
     call_sv(callback, G_DISCARD);
@@ -154,22 +166,24 @@ void sloppy(SV *event_callback) {
         switch(event.type) {
             case CreateNotify:
                 XSelectInput(display, event.xcreatewindow.window, event_mask);
-                call_perl(event_callback, event.type, event.xcreatewindow.window);
+                call_perl(event_callback, event.type, event.xcreatewindow.window, 0);
                 break;
 
             case EnterNotify:
-                call_perl(event_callback, event.type, event.xcrossing.window);
+                call_perl(event_callback, event.type, event.xcrossing.window, 0);
                 break;
 
             case FocusIn:
                 _last_display = display;
                 _last_window  = event.xfocus.window;
-                call_perl(event_callback, event.type, event.xfocus.window);
+                call_perl(event_callback, event.type, event.xfocus.window, 0);
                 break;
 
+            case KeyPress:
+                call_perl(event_callback, event.type, event.xkey.state, event.xkey.keycode);
 
             default:
-                call_perl(event_callback, event.type, 0);
+                call_perl(event_callback, event.type, 0, 0);
                 break;
         }
     }
