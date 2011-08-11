@@ -4,6 +4,8 @@
 # sloppy.c was GPL2, so is this.  See that file for further info.
 # This file is Copyright © 2011 — Paul Miller <jettero@gmail.com>
 
+$0 = "ratsloppy";
+
 my $sloppy_location;
 BEGIN {
     $sloppy_location = "$ENV{HOME}/.ratsloppy_c_";
@@ -15,8 +17,11 @@ use Inline Config=>DIRECTORY=>$sloppy_location;
 use Inline C=>DATA=>LIBS=>"-L/usr/X11R6/lib -lX11";
 use IPC::System::Simple qw(systemx capturex);
 
+open STDOUT, ">/dev/null" if "@ARGV" =~ m/-[a-z]*q/;
+fork and exit if "@ARGV" =~ m/-[a-z]*f/;
+
 my $keypress_lockout;
-my $last_mouse_target;
+
 sub event_callback {
     my $event = shift;
 
@@ -38,7 +43,6 @@ sub event_callback {
                             print "skipping $window/$xid due to keypress lockout\n";
 
                         } else {
-                            $last_mouse_target = $target_xid;
                             print "select $window\n";
                             systemx(qw(ratpoison -c), "select $window");
                         }
@@ -55,15 +59,15 @@ sub event_callback {
         when( 9 ) {
             my $target_xid = shift;
 
-            if( $target_xid != $last_mouse_target ) {
+            print "FocusIn($target_xid)\n";
+
+            if( $keypress_lockout > time ) { # if we're on a select lockout, then we should try to move the mouse to this xid
                 my @rats = capturex(qw(ratpoison -c), 'windows %s %n %i');
                 for(@rats) {
                     if( my ($status, $window, $xid) = m/^\s*([-+*])\s+(\d+)\s+(\d+)/ ) {
                         if( $target_xid == $xid ) {
-                            if( $status eq "-" ) {
-                                print "move mouse to $last_mouse_target (!= $target_xid)\n";
-                                banish_rat_kindof(); # uses last FocusIn window
-                            }
+                            print "move mouse to _last_window (almost certainly: $target_xid)\n";
+                            banish_rat_kindof(); # uses last FocusIn window
 
                             last;
                         }
