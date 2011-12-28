@@ -4775,7 +4775,7 @@ cmd_tmpwm (int interactive UNUSED, struct cmdarg **args)
         XSelectInput(dpy, RootWindow (dpy, screens[i].screen_num),
                      PropertyChangeMask | ColormapChangeMask
                      | SubstructureRedirectMask | SubstructureNotifyMask
-                     | StructureNotifyMask);
+                     | StructureNotifyMask | PointerMotionMask );
         XSync (dpy, False);
       }
     if (tmpwm_error_raised)

@@ -725,9 +725,13 @@ configure_notify (XConfigureEvent *ev)
 }
 
 static void
-xfocus (XMotionEvent *ev)
+xfocus (XEvent *ev, int moused)
 {
-  fprintf(stderr, "xfocus(%d, %d)\n", ev->x, ev->y);
+  Window root_win, child_win;
+  int root_x, root_y, m_x, m_y;
+  unsigned int mask;
+  XQueryPointer (dpy, DefaultRootWindow(dpy), &root_win, &child_win, &root_x, &root_y, &m_x, &m_y, &mask);
+  fprintf(stderr, "xfocus(%d, %d, %d)\n", root_x, root_y, moused);
 }
 
 /* This is called whan an application has requested the
@@ -859,6 +863,7 @@ delegate_event (XEvent *ev)
     case FocusIn:
       PRINT_DEBUG (("--- Handling FocusIn ---\n"));
       focus_change (&ev->xfocus);
+      xfocus(ev, 0);
       break;
 
     case MappingNotify:
@@ -883,11 +888,14 @@ delegate_event (XEvent *ev)
     case Expose:
     case MotionNotify:
       PRINT_DEBUG (("--- Handling MotionNotify ---\n"));
-      xfocus(&ev->xmotion);
+      xfocus(ev, 1);
       break;
     case KeyRelease:
     case ReparentNotify:
     case EnterNotify:
+      PRINT_DEBUG (("--- Handling EnterNotify ---\n"));
+      xfocus(ev, 1);
+      break;
     case SelectionNotify:
     case CirculateRequest:
       /* Ignore these events. */

@@ -268,7 +268,7 @@ init_screen (rp_screen *s, int screen_num)
   XSelectInput(dpy, RootWindow (dpy, screen_num),
                PropertyChangeMask | ColormapChangeMask
 	       | SubstructureRedirectMask | SubstructureNotifyMask
-	       | StructureNotifyMask);
+	       | StructureNotifyMask | PointerMotionMask );
   XSync (dpy, False);
 
   /* Set the numset for the frames to our global numset. */
