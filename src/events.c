@@ -724,6 +724,12 @@ configure_notify (XConfigureEvent *ev)
     screen_update(s,ev->width,ev->height);
 }
 
+static void
+xfocus (XMotionEvent *ev)
+{
+  fprintf(stderr, "xfocus(%d, %d)\n", ev->x, ev->y);
+}
+
 /* This is called whan an application has requested the
    selection. Copied from rxvt. */
 static void
@@ -876,6 +882,9 @@ delegate_event (XEvent *ev)
     case MapNotify:
     case Expose:
     case MotionNotify:
+      PRINT_DEBUG (("--- Handling MotionNotify ---\n"));
+      xfocus(&ev->xmotion);
+      break;
     case KeyRelease:
     case ReparentNotify:
     case EnterNotify:
