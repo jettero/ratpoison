@@ -42,7 +42,7 @@
 
 #define MAX_FONT_WIDTH(f) (rp_font_width)
 
-#define WIN_EVENTS (StructureNotifyMask | PropertyChangeMask | ColormapChangeMask | FocusChangeMask)
+#define WIN_EVENTS (StructureNotifyMask | PropertyChangeMask | ColormapChangeMask | FocusChangeMask | EnterWindowMask)
 /* EMPTY is used when a frame doesn't contain a window, or a window
    doesn't have a frame. Any time a field refers to the number of a
    window/frame/screen/etc, Use EMPTY to denote a lack there of. */
