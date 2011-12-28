@@ -42,7 +42,7 @@
 
 #define MAX_FONT_WIDTH(f) (rp_font_width)
 
-#define WIN_EVENTS (StructureNotifyMask | PropertyChangeMask | ColormapChangeMask | FocusChangeMask)
+#define WIN_EVENTS (StructureNotifyMask | PropertyChangeMask | ColormapChangeMask | FocusChangeMask | EnterWindowMask)
 /* EMPTY is used when a frame doesn't contain a window, or a window
    doesn't have a frame. Any time a field refers to the number of a
    window/frame/screen/etc, Use EMPTY to denote a lack there of. */
@@ -166,6 +166,8 @@ extern int rp_honour_transient_raise;
 extern int rp_honour_normal_raise;
 extern int rp_honour_transient_map;
 extern int rp_honour_normal_map;
+
+extern int rp_xfocus_mode;
 
 /* Keep track of X11 error messages. */
 extern char *rp_error_msg;

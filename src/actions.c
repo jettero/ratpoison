@@ -326,6 +326,8 @@ init_user_commands(void)
                "", arg_NUMBER,
                "", arg_NUMBER);
   add_command ("restart",       cmd_restart,    0, 0, 0);
+  add_command ("xfocus",        cmd_xfocus,     1, 0, 0,
+               "xfocus: ",   arg_NUMBER);
   add_command ("rudeness",      cmd_rudeness,   1, 0, 0,
                "Rudeness: ", arg_NUMBER);
   add_command ("select",        cmd_select,     1, 0, 1,
@@ -3526,6 +3528,17 @@ cmd_rudeness (int interactive UNUSED, struct cmdarg **args)
   return cmdret_new (RET_SUCCESS, NULL);
 }
 
+cmdret *
+cmd_xfocus (int interactive UNUSED, struct cmdarg **args)
+{
+  if (args[0] == NULL)
+    return cmdret_new (RET_SUCCESS, "%s", rp_xfocus_mode ? "focus follows mouse" : "mouse ignored");
+
+  rp_xfocus_mode = ARG(0, number) ? 1:0;
+
+  return cmdret_new (RET_SUCCESS, NULL);
+}
+
 char *
 wingravity_to_string (int g)
 {
@@ -4775,7 +4788,7 @@ cmd_tmpwm (int interactive UNUSED, struct cmdarg **args)
         XSelectInput(dpy, RootWindow (dpy, screens[i].screen_num),
                      PropertyChangeMask | ColormapChangeMask
                      | SubstructureRedirectMask | SubstructureNotifyMask
-                     | StructureNotifyMask);
+                     | StructureNotifyMask | PointerMotionMask );
         XSync (dpy, False);
       }
     if (tmpwm_error_raised)

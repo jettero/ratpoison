@@ -37,6 +37,7 @@
 #include <sys/wait.h>
 
 #include "ratpoison.h"
+#include "xfocus.h"
 
 /* The event currently being processed. Mostly used in functions from
    action.c which need to forward events to other windows. */
@@ -874,11 +875,19 @@ delegate_event (XEvent *ev)
       break;
 	
     case MapNotify:
-    case Expose:
+    case Expose: break;
     case MotionNotify:
+      PRINT_DEBUG (("--- Handling MotionNotify ---\n"));
+      if( rp_xfocus_mode )
+          xfocus(ev->type, ev);
+      break;
     case KeyRelease:
-    case ReparentNotify:
+    case ReparentNotify: break;
     case EnterNotify:
+      PRINT_DEBUG (("--- Handling EnterNotify ---\n"));
+      if( rp_xfocus_mode )
+          xfocus(ev->type, ev);
+      break;
     case SelectionNotify:
     case CirculateRequest:
       /* Ignore these events. */
