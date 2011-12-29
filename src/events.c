@@ -849,12 +849,13 @@ delegate_event (XEvent *ev)
     case FocusOut:
       PRINT_DEBUG (("--- Handling FocusOut ---\n"));
       focus_change (&ev->xfocus);
+      xfocus(ev->type, ev);
       break;
 
     case FocusIn:
       PRINT_DEBUG (("--- Handling FocusIn ---\n"));
       focus_change (&ev->xfocus);
-      xfocus(ev, 0);
+      xfocus(ev->type, ev);
       break;
 
     case MappingNotify:
@@ -876,16 +877,16 @@ delegate_event (XEvent *ev)
       break;
 	
     case MapNotify:
-    case Expose:
+    case Expose: break;
     case MotionNotify:
       PRINT_DEBUG (("--- Handling MotionNotify ---\n"));
-      xfocus(ev, 1);
+      xfocus(ev->type, ev);
       break;
     case KeyRelease:
-    case ReparentNotify:
+    case ReparentNotify: break;
     case EnterNotify:
       PRINT_DEBUG (("--- Handling EnterNotify ---\n"));
-      xfocus(ev, 1);
+      xfocus(ev->type, ev);
       break;
     case SelectionNotify:
     case CirculateRequest:
