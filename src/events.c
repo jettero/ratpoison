@@ -37,6 +37,7 @@
 #include <sys/wait.h>
 
 #include "ratpoison.h"
+#include "xfocus.h"
 
 /* The event currently being processed. Mostly used in functions from
    action.c which need to forward events to other windows. */
@@ -722,16 +723,6 @@ configure_notify (XConfigureEvent *ev)
     /* This is a root window of a screen,
      * look if its width or height changed: */
     screen_update(s,ev->width,ev->height);
-}
-
-static void
-xfocus (XEvent *ev, int moused)
-{
-  Window root_win, child_win;
-  int root_x, root_y, m_x, m_y;
-  unsigned int mask;
-  XQueryPointer (dpy, DefaultRootWindow(dpy), &root_win, &child_win, &root_x, &root_y, &m_x, &m_y, &mask);
-  fprintf(stderr, "xfocus(%d, %d, %d)\n", root_x, root_y, moused);
 }
 
 /* This is called whan an application has requested the

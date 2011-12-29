@@ -38,6 +38,8 @@ ratpoison_SOURCES	= actions.c		\
 			data.h			\
 			editor.c		\
 			editor.h		\
+			xfocus.c		\
+			xfocus.h        \
 			events.c		\
 			events.h		\
 			format.c		\
