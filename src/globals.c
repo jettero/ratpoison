@@ -79,6 +79,8 @@ int rp_honour_normal_raise = 1;
 int rp_honour_transient_map = 1;
 int rp_honour_normal_map = 1;
 
+int rp_xfocus_mode = 0;
+
 char *rp_error_msg = NULL;
 
 /* Global frame numset */

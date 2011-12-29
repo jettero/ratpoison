@@ -172,6 +172,7 @@ RP_CMD (rename);
 RP_CMD (resize);
 RP_CMD (restart);
 RP_CMD (rudeness);
+RP_CMD (xfocus);
 RP_CMD (select);
 RP_CMD (setenv);
 RP_CMD (shrink);

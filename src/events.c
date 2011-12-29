@@ -878,13 +878,15 @@ delegate_event (XEvent *ev)
     case Expose: break;
     case MotionNotify:
       PRINT_DEBUG (("--- Handling MotionNotify ---\n"));
-      xfocus(ev->type, ev);
+      if( rp_xfocus_mode )
+          xfocus(ev->type, ev);
       break;
     case KeyRelease:
     case ReparentNotify: break;
     case EnterNotify:
       PRINT_DEBUG (("--- Handling EnterNotify ---\n"));
-      xfocus(ev->type, ev);
+      if( rp_xfocus_mode )
+          xfocus(ev->type, ev);
       break;
     case SelectionNotify:
     case CirculateRequest:
