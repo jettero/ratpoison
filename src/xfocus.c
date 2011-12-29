@@ -3,7 +3,7 @@
 #include "ratpoison.h"
 #include "xfocus.h"
 #include "globals.h"
-#include "window.h"
+#include "split.h"
 
 static rp_frame * find_frame_by_mouse_position(int x, int y) {
     int i;
@@ -40,6 +40,7 @@ void xfocus (int type, XEvent *ev) {
 
         if( (f = find_frame_by_mouse_position(root_x, root_y)) ) {
             fprintf(stderr, "      focus this frame\n");
+            set_active_frame(f, 1); // frame, forced
         }
     }
 }
