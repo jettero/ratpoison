@@ -37,6 +37,12 @@ void xfocus (int type, XEvent *ev) {
 
     if( type == MotionNotify || type == EnterNotify ) {
         // This was a mouse move, so select the frame
+        if( type == EnterNotify ) {
+            XCrossingEvent *_ec = &ev->xcrossing;
+            fprintf(stderr, "  mode: %s\n", MTYPE2STRING(_ec->mode));
+            if( _ec->mode != NotifyNormal )
+                return; // we're not interested in ungrab re-entries and other things, just the mouse initiated ones
+        }
 
         if( (f = find_frame_by_mouse_position(root_x, root_y)) ) {
             fprintf(stderr, "      focus this frame\n");

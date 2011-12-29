@@ -849,13 +849,11 @@ delegate_event (XEvent *ev)
     case FocusOut:
       PRINT_DEBUG (("--- Handling FocusOut ---\n"));
       focus_change (&ev->xfocus);
-      xfocus(ev->type, ev);
       break;
 
     case FocusIn:
       PRINT_DEBUG (("--- Handling FocusIn ---\n"));
       focus_change (&ev->xfocus);
-      xfocus(ev->type, ev);
       break;
 
     case MappingNotify:
